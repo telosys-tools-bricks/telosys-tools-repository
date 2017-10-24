@@ -4,11 +4,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
-import org.telosys.tools.commons.ConsoleLogger;
 import org.telosys.tools.commons.TelosysToolsException;
 import org.telosys.tools.commons.TelosysToolsLogger;
 import org.telosys.tools.repository.model.EntityInDbModel;
 import org.telosys.tools.repository.model.RepositoryModel;
+
+import junit.env.telosys.tools.commons.LoggerProviderForUnitTests;
 
 public class PersistenceManagerInMemoryTest {
 	
@@ -29,7 +30,8 @@ public class PersistenceManagerInMemoryTest {
 	public void test1() throws TelosysToolsException {
 		
 		System.out.println("test1");
-		TelosysToolsLogger logger = new ConsoleLogger();
+		//TelosysToolsLogger logger = new ConsoleLogger();
+		TelosysToolsLogger logger = LoggerProviderForUnitTests.getLogger();
 		FileInMemory fileInMemory = new FileInMemory();
 		
 		assertNotNull(fileInMemory.getContent());

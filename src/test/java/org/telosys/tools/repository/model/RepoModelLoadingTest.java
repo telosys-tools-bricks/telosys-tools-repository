@@ -6,13 +6,14 @@ import static org.junit.Assert.assertNotNull;
 import java.io.File;
 
 import org.junit.Test;
-import org.telosys.tools.commons.ConsoleLogger;
 import org.telosys.tools.commons.TelosysToolsException;
 import org.telosys.tools.commons.TelosysToolsLogger;
 import org.telosys.tools.generic.model.Attribute;
 import org.telosys.tools.generic.model.JoinColumn;
 import org.telosys.tools.repository.persistence.PersistenceManager;
 import org.telosys.tools.repository.persistence.PersistenceManagerFactory;
+
+import junit.env.telosys.tools.commons.LoggerProviderForUnitTests;
 
 public class RepoModelLoadingTest {
 	
@@ -46,7 +47,9 @@ public class RepoModelLoadingTest {
 	public void test() throws TelosysToolsException {
 		File modelFile = new File("src/test/resources/repo/BookStore-with-JC.dbrep");
 		print(modelFile);
-		TelosysToolsLogger logger = new ConsoleLogger() ;
+		//TelosysToolsLogger logger = new ConsoleLogger() ;
+		TelosysToolsLogger logger = LoggerProviderForUnitTests.getLogger();
+
 		//PersistenceManager pm = new StandardFilePersistenceManager(modelFile, logger);
 		PersistenceManager pm = PersistenceManagerFactory.createPersistenceManager(modelFile, logger);
 		RepositoryModel model = pm.load();

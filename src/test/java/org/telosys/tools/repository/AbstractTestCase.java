@@ -7,7 +7,6 @@ import static org.junit.Assert.fail;
 import java.io.ByteArrayOutputStream;
 import java.util.List;
 
-import org.telosys.tools.commons.ConsoleLogger;
 import org.telosys.tools.commons.TelosysToolsException;
 import org.telosys.tools.commons.TelosysToolsLogger;
 import org.telosys.tools.commons.jdbc.ConnectionManager;
@@ -21,6 +20,8 @@ import org.telosys.tools.repository.model.LinkInDbModel;
 import org.telosys.tools.repository.model.RepositoryModel;
 import org.telosys.tools.repository.rules.RepositoryRules;
 import org.telosys.tools.repository.rules.RepositoryRulesProvider;
+
+import junit.env.telosys.tools.commons.LoggerProviderForUnitTests;
 
 public abstract class AbstractTestCase {
 	
@@ -135,7 +136,8 @@ public abstract class AbstractTestCase {
 	
 	private RepositoryGenerator getRepositoryGenerator() throws TelosysToolsException {
 		
-		TelosysToolsLogger logger = new ConsoleLogger() ;
+		//TelosysToolsLogger logger = new ConsoleLogger() ;
+		TelosysToolsLogger logger = LoggerProviderForUnitTests.getLogger();
 		ConnectionManager connectionManager = new ConnectionManager(logger);
 		RepositoryRules rules = RepositoryRulesProvider.getRepositoryRules() ;
 		return new RepositoryGenerator(connectionManager, rules, logger);
@@ -143,7 +145,9 @@ public abstract class AbstractTestCase {
 	
 	private RepositoryUpdator getRepositoryUpdator(ByteArrayOutputStream baosUpdateLog) throws TelosysToolsException {
 		
-		TelosysToolsLogger logger = new ConsoleLogger() ;
+		//TelosysToolsLogger logger = new ConsoleLogger() ;
+		TelosysToolsLogger logger = LoggerProviderForUnitTests.getLogger();
+
 		ConnectionManager connectionManager = new ConnectionManager(logger);
 		RepositoryRules rules = RepositoryRulesProvider.getRepositoryRules() ;
 		UpdateLogWriter updateLogger = new UpdateLogWriter( baosUpdateLog );

@@ -10,7 +10,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.Test;
-import org.telosys.tools.commons.ConsoleLogger;
 import org.telosys.tools.commons.TelosysToolsException;
 import org.telosys.tools.generic.model.Attribute;
 import org.telosys.tools.generic.model.Cardinality;
@@ -24,6 +23,8 @@ import org.telosys.tools.repository.model.LinkInDbModel;
 import org.telosys.tools.repository.model.RepositoryModel;
 import org.telosys.tools.repository.persistence.util.Xml;
 import org.w3c.dom.Document;
+
+import junit.env.telosys.tools.commons.LoggerProviderForUnitTests;
 
 public class RepositoryGeneratorTest extends AbstractTestCase {
 
@@ -255,7 +256,9 @@ public class RepositoryGeneratorTest extends AbstractTestCase {
 	}
 	
 	private Document convertToXml(RepositoryModel repositoryModel) throws TelosysToolsException {
-		XmlConverter xmlConverter = new XmlConverter(new ConsoleLogger());
+		//XmlConverter xmlConverter = new XmlConverter(new ConsoleLogger());
+		XmlConverter xmlConverter = new XmlConverter(LoggerProviderForUnitTests.getLogger());
+	
 		Document doc = xmlConverter.modelToXmlDocument(repositoryModel);
 		
 		System.out.println("XML DOCUMENT : ");
@@ -265,7 +268,8 @@ public class RepositoryGeneratorTest extends AbstractTestCase {
 	}		
 	
 	private RepositoryModel convertToModel(Document xmlDocument) throws TelosysToolsException {
-		XmlConverter xmlConverter = new XmlConverter(new ConsoleLogger());
+		//XmlConverter xmlConverter = new XmlConverter(new ConsoleLogger());
+		XmlConverter xmlConverter = new XmlConverter(LoggerProviderForUnitTests.getLogger());
 		RepositoryModel model = xmlConverter.xmlDocumentToModel(xmlDocument);
 		return model ;
 	}

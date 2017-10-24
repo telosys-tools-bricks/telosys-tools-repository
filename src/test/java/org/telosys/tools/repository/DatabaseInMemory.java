@@ -4,7 +4,6 @@ import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import org.telosys.tools.commons.ConsoleLogger;
 import org.telosys.tools.commons.FileUtil;
 import org.telosys.tools.commons.TelosysToolsException;
 import org.telosys.tools.commons.TelosysToolsLogger;
@@ -13,6 +12,8 @@ import org.telosys.tools.commons.dbcfg.DatabasesConfigurations;
 import org.telosys.tools.commons.dbcfg.DbConfigManager;
 import org.telosys.tools.commons.jdbc.ConnectionManager;
 import org.telosys.tools.commons.jdbc.SqlScriptRunner;
+
+import junit.env.telosys.tools.commons.LoggerProviderForUnitTests;
 
 public class DatabaseInMemory {
 	
@@ -32,7 +33,8 @@ public class DatabaseInMemory {
 		DatabasesConfigurations databasesConfigurations = getDatabaseConfigurations();
 		this.databaseId = databasesConfigurations.getDatabaseDefaultId() ;
 		this.databaseConfiguration = databasesConfigurations.getDatabaseConfiguration() ;
-		this.logger = new ConsoleLogger();
+		//this.logger = new ConsoleLogger();
+		this.logger = LoggerProviderForUnitTests.getLogger();
 		ConnectionManager connectionManager = new ConnectionManager( this.logger );
 		this.connection = connectionManager.getConnection(databaseConfiguration);
 	}
@@ -47,7 +49,8 @@ public class DatabaseInMemory {
 		DatabasesConfigurations databasesConfigurations = getDatabaseConfigurations();
 		this.databaseId = databaseId;
 		this.databaseConfiguration = databasesConfigurations.getDatabaseConfiguration(databaseId);
-		this.logger = new ConsoleLogger();
+		//this.logger = new ConsoleLogger();
+		this.logger = LoggerProviderForUnitTests.getLogger();
 		ConnectionManager connectionManager = new ConnectionManager( this.logger );
 		this.connection = connectionManager.getConnection(databaseConfiguration);
 	}

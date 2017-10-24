@@ -1,6 +1,5 @@
 package org.telosys.tools.repository.testlauncher;
 
-import org.telosys.tools.commons.ConsoleLogger;
 import org.telosys.tools.commons.FileUtil;
 import org.telosys.tools.commons.TelosysToolsException;
 import org.telosys.tools.commons.TelosysToolsLogger;
@@ -13,6 +12,8 @@ import org.telosys.tools.repository.model.RepositoryModel;
 import org.telosys.tools.repository.rules.RepositoryRules;
 import org.telosys.tools.repository.rules.RepositoryRulesProvider;
 
+import junit.env.telosys.tools.commons.LoggerProviderForUnitTests;
+
 public class RepoGeneratorLauncher {
 	
 	private final static String  DBCFG_FILE  = "/dbcfg/databases-test-PostgreSQL.dbcfg" ; ;
@@ -24,7 +25,9 @@ public class RepoGeneratorLauncher {
 		
 		DatabaseConfiguration databaseConfiguration = getDatabaseConfiguration(DATABASE_ID);
 		
-		TelosysToolsLogger logger = new ConsoleLogger() ;
+		//TelosysToolsLogger logger = new ConsoleLogger() ;
+		TelosysToolsLogger logger = LoggerProviderForUnitTests.getLogger();
+
 		ConnectionManager connectionManager = new ConnectionManager(logger);
 		RepositoryRules rules = RepositoryRulesProvider.getRepositoryRules() ;
 		RepositoryGenerator repositoryGenerator = new RepositoryGenerator(connectionManager, rules, logger);
