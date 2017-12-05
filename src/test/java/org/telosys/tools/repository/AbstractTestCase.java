@@ -1,15 +1,14 @@
 package org.telosys.tools.repository;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.List;
 
 import org.telosys.tools.commons.TelosysToolsException;
 import org.telosys.tools.commons.TelosysToolsLogger;
-import org.telosys.tools.commons.jdbc.ConnectionManager;
+import org.telosys.tools.commons.cfg.TelosysToolsCfg;
+import org.telosys.tools.commons.cfg.TelosysToolsCfgManager;
+import org.telosys.tools.commons.dbcfg.DbConnectionManager;
 import org.telosys.tools.repository.changelog.ChangeLog;
 import org.telosys.tools.repository.changelog.ChangeOnColumn;
 import org.telosys.tools.repository.changelog.ChangeOnEntity;
@@ -18,14 +17,18 @@ import org.telosys.tools.repository.model.AttributeInDbModel;
 import org.telosys.tools.repository.model.EntityInDbModel;
 import org.telosys.tools.repository.model.LinkInDbModel;
 import org.telosys.tools.repository.model.RepositoryModel;
-import org.telosys.tools.repository.rules.RepositoryRules;
-import org.telosys.tools.repository.rules.RepositoryRulesProvider;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import junit.env.telosys.tools.commons.LoggerProviderForUnitTests;
+import junit.env.telosys.tools.commons.TestsEnv;
 
 public abstract class AbstractTestCase {
 	
-	protected final static int DATABASE_ID_1 = 1 ;
+	protected static final String PROJECT_FOLDER = "project2" ;
+	protected static final int    DATABASE_ID_1  = 1 ;
 	
 	protected void printSeparator(String s ) {
 		System.out.println("==================================================================================================");
@@ -85,7 +88,9 @@ public abstract class AbstractTestCase {
 		databaseInMemory.executeSqlInit(sqlScriptId);
 		
 		System.out.println("Repository generation... ");
-		RepositoryGenerator repositoryGenerator = getRepositoryGenerator() ;
+		//RepositoryGenerator repositoryGenerator = getRepositoryGenerator() ;
+		DbModelGenerator repositoryGenerator = getDbModelGenerator(PROJECT_FOLDER);
+
 		RepositoryModel repositoryModel = repositoryGenerator.generate( databaseInMemory.getDatabaseConfiguration() );
 		
 		databaseInMemory.close();
@@ -109,8 +114,11 @@ public abstract class AbstractTestCase {
 		DatabaseInMemory databaseInMemory = new DatabaseInMemory(DATABASE_ID_1);
 		databaseInMemory.executeSqlInit(sqlScriptId);
 		
+
+		
 		System.out.println("Repository model generation... ");
-		RepositoryGenerator repositoryGenerator = getRepositoryGenerator() ;
+		//RepositoryGenerator repositoryGenerator = getRepositoryGenerator() ;
+		DbModelGenerator repositoryGenerator = getDbModelGenerator(PROJECT_FOLDER);
 		RepositoryModel repositoryModel = repositoryGenerator.generate( databaseInMemory.getDatabaseConfiguration() );
 		
 		System.out.println("Database changes... ");
@@ -118,7 +126,8 @@ public abstract class AbstractTestCase {
 		
 		System.out.println("Repository model update... ");
 		ByteArrayOutputStream baosUpdateLog = new ByteArrayOutputStream();
-		RepositoryUpdator repositoryUpdator = getRepositoryUpdator(baosUpdateLog);
+		//RepositoryUpdator repositoryUpdator = getRepositoryUpdator(baosUpdateLog);
+		DbModelUpdator repositoryUpdator = getDbModelUpdator(PROJECT_FOLDER, baosUpdateLog);
 
 		ChangeLog changeLog = repositoryUpdator.updateRepository(databaseInMemory.getDatabaseConfiguration(), repositoryModel);
 		
@@ -134,24 +143,29 @@ public abstract class AbstractTestCase {
 		return new UpdateResult(repositoryModel, changeLog);
 	}
 	
-	private RepositoryGenerator getRepositoryGenerator() throws TelosysToolsException {
-		
-		//TelosysToolsLogger logger = new ConsoleLogger() ;
-		TelosysToolsLogger logger = LoggerProviderForUnitTests.getLogger();
-		ConnectionManager connectionManager = new ConnectionManager(logger);
-		RepositoryRules rules = RepositoryRulesProvider.getRepositoryRules() ;
-		return new RepositoryGenerator(connectionManager, rules, logger);
+	private TelosysToolsCfg getTelosysToolsCfg(String projectName) throws TelosysToolsException {
+		File projectFolder = TestsEnv.getTestFolder(projectName);
+		TelosysToolsCfgManager cfgManager = new TelosysToolsCfgManager(projectFolder.getAbsolutePath());
+		TelosysToolsCfg telosysToolsCfg = cfgManager.loadTelosysToolsCfg();
+		return telosysToolsCfg ;
 	}
 	
-	private RepositoryUpdator getRepositoryUpdator(ByteArrayOutputStream baosUpdateLog) throws TelosysToolsException {
-		
-		//TelosysToolsLogger logger = new ConsoleLogger() ;
+	private DbConnectionManager getDbConnectionManager(String projectName) throws TelosysToolsException {
+		TelosysToolsCfg telosysToolsCfg = getTelosysToolsCfg(projectName);
+		return new DbConnectionManager(telosysToolsCfg);
+	}
+	
+	protected DbModelGenerator getDbModelGenerator(String projectFolderName) throws TelosysToolsException {
+		DbConnectionManager dbConnectionManager = getDbConnectionManager(projectFolderName);
 		TelosysToolsLogger logger = LoggerProviderForUnitTests.getLogger();
-
-		ConnectionManager connectionManager = new ConnectionManager(logger);
-		RepositoryRules rules = RepositoryRulesProvider.getRepositoryRules() ;
+		return new DbModelGenerator(dbConnectionManager, logger);
+	}
+	
+	protected DbModelUpdator getDbModelUpdator(String projectFolderName, ByteArrayOutputStream baosUpdateLog) throws TelosysToolsException {
+		TelosysToolsLogger logger = LoggerProviderForUnitTests.getLogger();
+		DbConnectionManager dbConnectionManager = getDbConnectionManager(projectFolderName);
 		UpdateLogWriter updateLogger = new UpdateLogWriter( baosUpdateLog );
-		return new RepositoryUpdator(connectionManager, rules, logger, updateLogger);
+		return new DbModelUpdator(dbConnectionManager, logger, updateLogger);
 	}
 	
 	/**

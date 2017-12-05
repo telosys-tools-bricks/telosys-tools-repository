@@ -35,7 +35,7 @@ public class DatabaseInMemory {
 		this.databaseConfiguration = databasesConfigurations.getDatabaseConfiguration() ;
 		//this.logger = new ConsoleLogger();
 		this.logger = LoggerProviderForUnitTests.getLogger();
-		ConnectionManager connectionManager = new ConnectionManager( this.logger );
+		ConnectionManager connectionManager = new ConnectionManager();
 		this.connection = connectionManager.getConnection(databaseConfiguration);
 	}
 	
@@ -51,7 +51,7 @@ public class DatabaseInMemory {
 		this.databaseConfiguration = databasesConfigurations.getDatabaseConfiguration(databaseId);
 		//this.logger = new ConsoleLogger();
 		this.logger = LoggerProviderForUnitTests.getLogger();
-		ConnectionManager connectionManager = new ConnectionManager( this.logger );
+		ConnectionManager connectionManager = new ConnectionManager();
 		this.connection = connectionManager.getConnection(databaseConfiguration);
 	}
 	

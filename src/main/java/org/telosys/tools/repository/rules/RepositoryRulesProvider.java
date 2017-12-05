@@ -20,11 +20,17 @@ package org.telosys.tools.repository.rules;
  * @author L.GUERIN
  * 
  */
-public class RepositoryRulesProvider
-{
+public class RepositoryRulesProvider {
+
     /**
-     * Returns the ENTITY class name for the given database table name
-     * @param databaseTableName
+     * Private constructor
+     */
+    private RepositoryRulesProvider() {
+		super();
+	}
+
+	/**
+     * Return the RepositoryRules to be used 
      * @return
      */
     public static RepositoryRules getRepositoryRules() {

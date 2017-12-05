@@ -28,7 +28,6 @@ import org.telosys.tools.db.model.DatabaseModelManager;
 import org.telosys.tools.db.model.DatabaseTable;
 import org.telosys.tools.db.model.DatabaseTables;
 import org.telosys.tools.repository.model.RepositoryModel;
-import org.telosys.tools.repository.rules.RepositoryRules;
 
 /**
  * Repository (model) generator 
@@ -44,8 +43,8 @@ public class DbModelGenerator extends DbModelManager {
 	 * @param repositoryRules
 	 * @param logger
 	 */
-	public DbModelGenerator(DbConnectionManager dbConnectionManager, RepositoryRules repositoryRules, TelosysToolsLogger logger) {
-		super(dbConnectionManager, repositoryRules, logger);
+	public DbModelGenerator(DbConnectionManager dbConnectionManager, TelosysToolsLogger logger) {
+		super(dbConnectionManager, logger);
 	}
 
 	/**
@@ -72,7 +71,7 @@ public class DbModelGenerator extends DbModelManager {
 		fkTypeManager.setAttributesForeignKeyInformation(repositoryModel);
 		
 		//--- STEP 2 : Generates the links between entities 
-		LinksManager linksManager = new LinksManager(getRepositoryRules(), getLogger() );
+		LinksManager linksManager = new LinksManager(getRepositoryRules() );
 		linksManager.generateAllLinks(repositoryModel);
 		
 		return repositoryModel ;
@@ -141,7 +140,7 @@ public class DbModelGenerator extends DbModelManager {
 		logger.log("   ... * Table Types Array  = " + sb.toString());
 
 		//--- Load the Database Model
-		DatabaseModelManager manager = new DatabaseModelManager( this.getLogger() );
+		DatabaseModelManager manager = new DatabaseModelManager();
 		DatabaseTables dbTables = manager.getDatabaseTables(con, sCatalog, sSchema, sTableNamePattern, arrayTableTypes, sTableNameInclude, sTableNameExclude);
 
 		//--- For each table add an Entity in the repository

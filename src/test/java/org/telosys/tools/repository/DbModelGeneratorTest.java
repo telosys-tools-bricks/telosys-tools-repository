@@ -1,21 +1,10 @@
 package org.telosys.tools.repository;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
-import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.Test;
 import org.telosys.tools.commons.TelosysToolsException;
-import org.telosys.tools.commons.TelosysToolsLogger;
-import org.telosys.tools.commons.cfg.TelosysToolsCfg;
-import org.telosys.tools.commons.cfg.TelosysToolsCfgManager;
-import org.telosys.tools.commons.dbcfg.DbConnectionManager;
 import org.telosys.tools.generic.model.Attribute;
 import org.telosys.tools.generic.model.Cardinality;
 import org.telosys.tools.generic.model.JoinColumn;
@@ -27,29 +16,32 @@ import org.telosys.tools.repository.model.EntityInDbModel;
 import org.telosys.tools.repository.model.LinkInDbModel;
 import org.telosys.tools.repository.model.RepositoryModel;
 import org.telosys.tools.repository.persistence.util.Xml;
-import org.telosys.tools.repository.rules.RepositoryRules;
-import org.telosys.tools.repository.rules.RepositoryRulesProvider;
 import org.w3c.dom.Document;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import junit.env.telosys.tools.commons.LoggerProviderForUnitTests;
-import junit.env.telosys.tools.commons.TestsEnv;
 
 public class DbModelGeneratorTest extends AbstractTestCase {
 	
-	private TelosysToolsCfg getTelosysToolsCfg(String projectName) throws TelosysToolsException {
-		File projectFolder = TestsEnv.getTestFolder(projectName);
-		TelosysToolsCfgManager cfgManager = new TelosysToolsCfgManager(projectFolder.getAbsolutePath());
-		TelosysToolsCfg telosysToolsCfg = cfgManager.loadTelosysToolsCfg();
-		return telosysToolsCfg ;
-	}
+//	private TelosysToolsCfg getTelosysToolsCfg(String projectName) throws TelosysToolsException {
+//		File projectFolder = TestsEnv.getTestFolder(projectName);
+//		TelosysToolsCfgManager cfgManager = new TelosysToolsCfgManager(projectFolder.getAbsolutePath());
+//		TelosysToolsCfg telosysToolsCfg = cfgManager.loadTelosysToolsCfg();
+//		return telosysToolsCfg ;
+//	}
 
-	private DbModelGenerator getDbModelGenerator() throws TelosysToolsException {
-		TelosysToolsCfg telosysToolsCfg = getTelosysToolsCfg("project2") ;
-		TelosysToolsLogger logger = LoggerProviderForUnitTests.getLogger();
-		DbConnectionManager dbConnectionManager = new DbConnectionManager(telosysToolsCfg);
-		RepositoryRules rules = RepositoryRulesProvider.getRepositoryRules() ;
-		return new DbModelGenerator(dbConnectionManager, rules, logger);
-	}
+//	private DbModelGenerator getDbModelGenerator() throws TelosysToolsException {
+//		TelosysToolsCfg telosysToolsCfg = getTelosysToolsCfg("project2") ;
+//		TelosysToolsLogger logger = LoggerProviderForUnitTests.getLogger();
+//		DbConnectionManager dbConnectionManager = new DbConnectionManager(telosysToolsCfg);
+//		RepositoryRules rules = RepositoryRulesProvider.getRepositoryRules() ;
+//		return new DbModelGenerator(dbConnectionManager, rules, logger);
+//	}
 
 	protected RepositoryModel generateDbModel(int sqlScriptId) throws TelosysToolsException {
 		
@@ -58,7 +50,7 @@ public class DbModelGeneratorTest extends AbstractTestCase {
 		databaseInMemory.executeSqlInit(sqlScriptId);
 		
 		System.out.println("Repository generation... ");
-		DbModelGenerator dbModelGenerator = getDbModelGenerator() ;
+		DbModelGenerator dbModelGenerator = getDbModelGenerator(PROJECT_FOLDER) ;
 		RepositoryModel repositoryModel = dbModelGenerator.generate( databaseInMemory.getDatabaseConfiguration() );
 		
 		databaseInMemory.close();
@@ -75,7 +67,6 @@ public class DbModelGeneratorTest extends AbstractTestCase {
 		assertTrue(repositoryModel.getDatabaseId() == DATABASE_ID_1 );
 		assertEquals(2, repositoryModel.getNumberOfEntities() );
 
-//		EntityInDbModel customerEntity = repositoryModel.getEntityByName("CUSTOMER") ;
 		EntityInDbModel customerEntity = repositoryModel.getEntityByTableName("CUSTOMER") ;
 		assertNotNull( customerEntity );
 		assertNotNull( customerEntity.getAttributeByColumnName("CODE") );
@@ -83,7 +74,6 @@ public class DbModelGeneratorTest extends AbstractTestCase {
 		assertNotNull( customerEntity.getAttributeByColumnName("LAST_NAME") );
 		//assertNotNull( customerEntity.getColumn("xxxx") );
 
-//		EntityInDbModel countryEntity = repositoryModel.getEntityByName("COUNTRY") ;
 		EntityInDbModel countryEntity = repositoryModel.getEntityByTableName("COUNTRY") ;
 		assertNotNull( countryEntity );
 		assertNotNull( countryEntity.getAttributeByColumnName("CODE") );
@@ -99,26 +89,20 @@ public class DbModelGeneratorTest extends AbstractTestCase {
 		assertTrue(repositoryModel.getDatabaseId() == DATABASE_ID_1 );
 		assertEquals(2, repositoryModel.getNumberOfEntities() );
 
-//		EntityInDbModel studentEntity = repositoryModel.getEntityByName("STUDENT");
 		EntityInDbModel studentEntity = repositoryModel.getEntityByTableName("STUDENT");
 		assertNotNull(studentEntity);
 		
-//		EntityInDbModel teacherEntity = repositoryModel.getEntityByName("TEACHER");
 		EntityInDbModel teacherEntity = repositoryModel.getEntityByTableName("TEACHER");
 		assertNotNull(teacherEntity);
 		
-//		LinkInDbModel[] studentLinks = studentEntity.getLinks();
 		LinkInDbModel[] studentLinks = studentEntity.getLinksArray();
 		System.out.println("STUDENT links : " + studentLinks.length);
 		assertTrue(studentLinks.length == 2);
 
-//		LinkInDbModel[] teacherLinks = teacherEntity.getLinks();
 		LinkInDbModel[] teacherLinks = teacherEntity.getLinksArray();
 		System.out.println("TEACHER links : " + teacherLinks.length);
 		assertTrue(teacherLinks.length == 2);
 		
-//		checkJavaName(studentLinks[0].getJavaFieldName(),studentLinks[1].getJavaFieldName(), "teacher", "teacher2" );
-//		checkJavaName(teacherLinks[0].getJavaFieldName(),teacherLinks[1].getJavaFieldName(), "listOfStudent", "listOfStudent2" );		
 		checkJavaName(studentLinks[0].getFieldName(),studentLinks[1].getFieldName(), "teacher", "teacher2" );
 		checkJavaName(teacherLinks[0].getFieldName(),teacherLinks[1].getFieldName(), "listOfStudent", "listOfStudent2" );	
 		
@@ -154,26 +138,20 @@ public class DbModelGeneratorTest extends AbstractTestCase {
 		assertTrue(repositoryModel.getDatabaseId() == DATABASE_ID_1 );
 		assertEquals(2, repositoryModel.getNumberOfEntities() );
 
-//		EntityInDbModel studentEntity = repositoryModel.getEntityByName("STUDENT");
 		EntityInDbModel studentEntity = repositoryModel.getEntityByTableName("STUDENT");
 		assertNotNull(studentEntity);
 		
-//		EntityInDbModel teacherEntity = repositoryModel.getEntityByName("TEACHER");
 		EntityInDbModel teacherEntity = repositoryModel.getEntityByTableName("TEACHER");
 		assertNotNull(teacherEntity);
 		
-//		LinkInDbModel[] studentLinks = studentEntity.getLinks();
 		LinkInDbModel[] studentLinks = studentEntity.getLinksArray();
 		System.out.println("STUDENT links : " + studentLinks.length);
 		assertTrue(studentLinks.length == 2);
 
-//		LinkInDbModel[] teacherLinks = teacherEntity.getLinks();
 		LinkInDbModel[] teacherLinks = teacherEntity.getLinksArray();
 		System.out.println("TEACHER links : " + teacherLinks.length);
 		assertTrue(teacherLinks.length == 2);
 		
-//		checkJavaName(studentLinks[0].getJavaFieldName(),studentLinks[1].getJavaFieldName(), "teacher2", "teacher3" );
-//		checkJavaName(teacherLinks[0].getJavaFieldName(),teacherLinks[1].getJavaFieldName(), "listOfStudent2", "listOfStudent3" );		
 		checkJavaName(studentLinks[0].getFieldName(),studentLinks[1].getFieldName(), "teacher2", "teacher3" );
 		checkJavaName(teacherLinks[0].getFieldName(),teacherLinks[1].getFieldName(), "listOfStudent2", "listOfStudent3" );		
 	}
@@ -186,7 +164,6 @@ public class DbModelGeneratorTest extends AbstractTestCase {
 		printModel(repositoryModel);
 		assertEquals(3, repositoryModel.getNumberOfEntities() );
 
-//		EntityInDbModel studentEntity = repositoryModel.getEntityByName("STUDENT");
 		EntityInDbModel studentEntity = repositoryModel.getEntityByTableName("STUDENT");
 		assertNotNull(studentEntity);
 		assertFalse( studentEntity.isJoinTable() );
@@ -239,28 +216,22 @@ public class DbModelGeneratorTest extends AbstractTestCase {
 //		assertEquals(1, joinColumns.size() ); // 
 		
 		
-//		EntityInDbModel teacherEntity = repositoryModel.getEntityByName("TEACHER");
 		EntityInDbModel teacherEntity = repositoryModel.getEntityByTableName("TEACHER");
 		assertNotNull(teacherEntity);
 		assertFalse( teacherEntity.isJoinTable() );
 
-//		EntityInDbModel relation1Entity = repositoryModel.getEntityByName("RELATION1");
 		EntityInDbModel relation1Entity = repositoryModel.getEntityByTableName("RELATION1");
 		assertNotNull(relation1Entity);
 		assertTrue( relation1Entity.isJoinTable() );
 		
-		
-//		LinkInDbModel[] studentLinks = studentEntity.getLinks();
 		LinkInDbModel[] studentLinks = studentEntity.getLinksArray();
 		System.out.println("STUDENT links : " + studentLinks.length);
 		assertEquals(3, studentLinks.length);
 
-//		LinkInDbModel[] teacherLinks = teacherEntity.getLinks();
 		LinkInDbModel[] teacherLinks = teacherEntity.getLinksArray();
 		System.out.println("TEACHER links : " + teacherLinks.length);
 		assertEquals(3, teacherLinks.length);
 		
-//		LinkInDbModel[] relation1Links = relation1Entity.getLinks();
 		LinkInDbModel[] relation1Links = relation1Entity.getLinksArray();
 		System.out.println("RELATION1 links : " + relation1Links.length);
 		assertEquals(0, relation1Links.length);

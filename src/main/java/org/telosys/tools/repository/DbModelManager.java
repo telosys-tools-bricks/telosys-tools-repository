@@ -37,12 +37,13 @@ import org.telosys.tools.repository.model.ForeignKeyColumnInDbModel;
 import org.telosys.tools.repository.model.ForeignKeyInDbModel;
 import org.telosys.tools.repository.model.RepositoryModel;
 import org.telosys.tools.repository.rules.RepositoryRules;
+import org.telosys.tools.repository.rules.RepositoryRulesProvider;
 
 /**
  * Abstract repository manager ancestor<br>
  * Common functions for repository "generator" and "updator" <br>
  * 
- * @author Sylvain LEROY, Laurent GUERIN, Eric LEMELIN
+ * @author Laurent GUERIN, Eric LEMELIN
  * 
  */
 
@@ -60,12 +61,11 @@ public abstract class DbModelManager
 	/**
 	 * Constructor
 	 * @param dbConnectionManager
-	 * @param repositoryRules
 	 * @param logger
 	 */
-	protected DbModelManager(DbConnectionManager dbConnectionManager, RepositoryRules repositoryRules, TelosysToolsLogger logger) {
+	protected DbModelManager(DbConnectionManager dbConnectionManager, TelosysToolsLogger logger) {
 		this.dbConnectionManager = dbConnectionManager ;
-		this.repositoryRules = repositoryRules ;
+		this.repositoryRules = RepositoryRulesProvider.getRepositoryRules() ;
 		this.logger = logger;
 	}
 
@@ -79,7 +79,6 @@ public abstract class DbModelManager
 	 */
 	protected Connection getConnection(DatabaseConfiguration databaseConfiguration) throws TelosysToolsException {
 		if ( this.dbConnectionManager != null ) {
-//			return this.dbConnectionManager.getConnection(databaseConfiguration) ;
 			return this.dbConnectionManager.getConnection( databaseConfiguration.getDatabaseId() );
 		}
 		else {
@@ -151,13 +150,11 @@ public abstract class DbModelManager
 		return entity ;
 	}
 	
-	private void addColumns( EntityInDbModel entity, DatabaseTable dbTable) 
-	{
+	private void addColumns( EntityInDbModel entity, DatabaseTable dbTable) {
 		//--- For each column of the table ...
 		for ( DatabaseColumn dbCol : dbTable.getColumns() ) {
 			//--- Create a new column from the database model
 			AttributeInDbModel column = buildColumn( entity, dbCol );
-			
 			//--- Add the "column" element in the XML tree
 			entity.storeAttribute(column);
 		}
@@ -238,9 +235,7 @@ public abstract class DbModelManager
 		column.setJdbcTypeCode(iJdbcTypeCode);
 		column.setDatabaseNotNull(dbNotNull);
 		column.setDatabaseSize(iDbSize);
-		//column.setJavaName(sAttributeName);
 		column.setName(sAttributeName); // v 3.0.0
-		//column.setJavaType(sAttributeType);
 		column.setModelFullType(sAttributeType); // v 3.0.0
 		
 		//--- Java default value for primitive types
@@ -258,7 +253,6 @@ public abstract class DbModelManager
 		column.setDateType(getAttributeDateType(iJdbcTypeCode)); // V 3.0.0
 
 		//--- Is this column in the Table Primary Key ?
-		//column.setPrimaryKey( dbCol.isInPrimaryKey());
 		column.setKeyElement( dbCol.isInPrimaryKey()); // v 3.0.0
 
 		//--- Is this column a member of a Foreign Key ?
@@ -278,12 +272,10 @@ public abstract class DbModelManager
 		//--- Further information for Java Validator 
 		if ( ! column.isJavaPrimitiveType() ) {
 			if ( dbCol.isNotNull()  ) {
-				//column.setJavaNotNull( true );
-				column.setNotNull( true ); // v 3.0.0
+				column.setNotNull(true); // v 3.0.0
 				column.setNotEmpty(true);
 			}
 			if ( column.isJavaTypeString() ) {
-				//column.setMaxLength(""+iDbSize);
 				column.setMaxLength(iDbSize); // v 3.0.0
 			}
 		}

@@ -16,9 +16,9 @@
 package org.telosys.tools.repository;
 
 import java.util.LinkedList;
+import java.util.logging.Logger;
 
 import org.telosys.tools.commons.TelosysToolsException;
-import org.telosys.tools.commons.TelosysToolsLogger;
 import org.telosys.tools.generic.model.Cardinality;
 import org.telosys.tools.generic.model.FetchType;
 import org.telosys.tools.repository.changelog.ChangeLog;
@@ -44,21 +44,21 @@ public class LinksManager {
 
 	private final RepositoryRules repositoryRules ;
 	
-	private final TelosysToolsLogger logger;
+	private static final Logger logger = null ; 
+	// TODO: TelosysLoggerProvider.getLogger()
 
 	/**
 	 * Constructor
 	 * @param repositoryRules
-	 * @param logger
 	 */
-	public LinksManager(RepositoryRules repositoryRules, TelosysToolsLogger logger) {
-		this.logger = logger;
+	public LinksManager(RepositoryRules repositoryRules) {
 		this.repositoryRules = 	repositoryRules ;
 	}
 	
 	private void log(String msg) {
 		if ( logger != null ) {
-			logger.log("[LOG] " + this.getClass().getName() + " : " + msg);
+			//logger.log("[LOG] " + this.getClass().getName() + " : " + msg);
+			logger.info(msg);
 		}
 	}
 
