@@ -28,13 +28,12 @@ import java.io.OutputStream;
 
 public class UpdateLogWriter
 {
-    private final static int         LF              = 1;
+    private static final int         LF              = 1;
 
-    private final static int         CRLF            = 2;
+    private static final int         CRLF            = 2;
 
     private int                      endOfLine     = LF; // for future use ?
 	
-	//private FileOutputStream _fos = null ;
 	private OutputStream outputStream = null ;
 	
     //-----------------------------------------------------------------------------
@@ -73,9 +72,8 @@ public class UpdateLogWriter
     }
     
     //-----------------------------------------------------------------------------
-    synchronized public void println( String msg )
+    public synchronized void println( String msg )
     {
-    	System.out.println("LogWritter.println (" + msg + ")");
         if (outputStream != null) {
             try {
                 outputStream.write(msg.getBytes());
@@ -95,7 +93,7 @@ public class UpdateLogWriter
     }
     
     //-----------------------------------------------------------------------------
-    synchronized public void close()
+    public synchronized void close()
     {
         if (outputStream != null) {
         	try {
