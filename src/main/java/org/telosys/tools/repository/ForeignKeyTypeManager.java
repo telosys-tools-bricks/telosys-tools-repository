@@ -37,19 +37,6 @@ public class ForeignKeyTypeManager
 	private final static int FK_SIMPLE    = 1 ;
 	private final static int FK_COMPOSITE = 2 ;
 	
-//	private void addForeignKeyParts( EntityInDbModel entity, DatabaseTable dbTable) {
-//		//--- For each foreign key of the table ...
-//		for ( DatabaseForeignKey dbFK : dbTable.getForeignKeys() ) {
-//			// Build de FK instance
-//			ForeignKeyInDbModel fk = buildForeignKey( dbFK ) ;
-//			// Attach the FK to the entity
-//			entity.storeForeignKey(fk);
-//			
-//			// Set FK type for each attribute involved in a FK  
-//			setAttributesFKType(entity, fk); // Added in v 3.0.0
-//		}
-//	}
-	
 	/**
 	 * Set the Foreign Key type for each attribute involved in a Foreign Key <br>
 	 * NB : This method must be called before the links generation<br>
@@ -64,6 +51,13 @@ public class ForeignKeyTypeManager
 			List<ForeignKey> foreignKeys = entity.getDatabaseForeignKeys();
 			for ( ForeignKey fk : foreignKeys ) {
 				EntityInDbModel referencedEntity = repositoryModel.getEntityByTableName( fk.getReferencedTableName() );
+				// Check if found
+				if ( referencedEntity == null ) {
+					String msg = "Table '" + fk.getReferencedTableName() + "' not found in model." 
+							+ " Referenced by Foreign Key '" + fk.getName() + "' : "
+							+ " table '" + fk.getTableName() + "' --> '" + fk.getReferencedTableName() +"'" ;
+					throw new RuntimeException(msg);
+				}
 				// Set FK type for each attribute involved in a FK  
 				setAttributesFKInfo((EntityInDbModel)entity, fk, referencedEntity); 
 			}

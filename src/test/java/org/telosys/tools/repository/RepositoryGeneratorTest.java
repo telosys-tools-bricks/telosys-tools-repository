@@ -255,6 +255,28 @@ public class RepositoryGeneratorTest extends AbstractTestCase {
 		checkTeacherEntity(model2.getEntityByTableName("TEACHER"));
 	}
 	
+	@Test
+	public void test991() throws TelosysToolsException {
+		printSeparator("test991");
+		
+		RepositoryModel repositoryModel = generateRepositoryModel(991);
+		printModel(repositoryModel);
+		assertEquals(2, repositoryModel.getNumberOfEntities() );
+
+		checkStudentEntity(repositoryModel.getEntityByTableName("STUDENT"));
+		checkTeacherEntity(repositoryModel.getEntityByTableName("TEACHER"));		
+		//checkStudentEntity(repositoryModel.getEntityByTableName("student"));
+		//checkTeacherEntity(repositoryModel.getEntityByTableName("teacher"));		
+		
+		Document doc = convertToXml(repositoryModel);
+		
+		RepositoryModel repoModel = convertToModel(doc);
+		assertEquals(repositoryModel.getNumberOfEntities(), repoModel.getNumberOfEntities());
+		
+		checkStudentEntity(repoModel.getEntityByTableName("STUDENT"));
+		checkTeacherEntity(repoModel.getEntityByTableName("TEACHER"));
+	}
+	
 	private Document convertToXml(RepositoryModel repositoryModel) throws TelosysToolsException {
 		//XmlConverter xmlConverter = new XmlConverter(new ConsoleLogger());
 		XmlConverter xmlConverter = new XmlConverter(LoggerProviderForUnitTests.getLogger());
