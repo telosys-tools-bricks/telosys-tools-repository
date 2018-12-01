@@ -135,6 +135,7 @@ public class EntityInDbModel implements Serializable, Entity // v 3.0.0 ( 2 spec
 	}
 
 	//--------------------------------------------------------------------------
+	@Override
 	public String getDatabaseComment() {
 		return databaseComment;
 	}
