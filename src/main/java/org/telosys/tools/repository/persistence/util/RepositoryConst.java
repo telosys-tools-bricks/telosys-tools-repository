@@ -21,137 +21,109 @@ import java.util.Date;
 
 public class RepositoryConst {
 
-//	//--------------------------------------------------------------------------------------------------
-//	// WRAPPERS 
-//	//--------------------------------------------------------------------------------------------------
-//	public final static BaseWrapper               BASE_WRAPPER = new BaseWrapper();
-//	public final static EntityWrapper             ENTITY_WRAPPER = new EntityWrapper();
-//	public final static LinkWrapper               LINK_WRAPPER = new LinkWrapper();
-//	public final static ColumnWrapper             COLUMN_WRAPPER = new ColumnWrapper();
-//	public final static ForeignKeyWrapper         FOREIGNKEY_WRAPPER = new ForeignKeyWrapper();
-//	public final static ForeignKeyColumnWrapper   FOREIGNKEY_COLUMN_WRAPPER = new ForeignKeyColumnWrapper();
-//
-//	public final static JoinTableWrapper          JOIN_TABLE_WRAPPER  = new JoinTableWrapper();
-//	//public final static JoinFKWrapper     JOIN_FK_WRAPPER     = new JoinFKWrapper();	
-//	public final static JoinColumnWrapper         JOIN_COLUMN_WRAPPER          = new JoinColumnWrapper();	
-//	
-//	public final static JoinColumnsWrapper        JOIN_COLUMNS_WRAPPER         = new JoinColumnsWrapper();
-//	public final static InverseJoinColumnsWrapper INVERSE_JOIN_COLUMNS_WRAPPER = new InverseJoinColumnsWrapper();
-//
-//	public final static GeneratedValueWrapper     GENERATED_VALUE_WRAPPER = new GeneratedValueWrapper();
-//	public final static SequenceGeneratorWrapper  SEQUENCE_GENERATOR_WRAPPER = new SequenceGeneratorWrapper();
-//	public final static TableGeneratorWrapper     TABLE_GENERATOR_WRAPPER = new TableGeneratorWrapper();
-//	
-//	//--------------------------------------------------------------------------------------------------
-
-	// v 2.1.1
-	//public final static SimpleDateFormat DATE_TIME_ISO_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
 	public static final String COLLECTION_JAVA_TYPE = "java.util.List";
 	
-	public final static String MAPPING_ONE_TO_ONE   = "OneToOne";
-	public final static String MAPPING_ONE_TO_MANY  = "OneToMany";
-	public final static String MAPPING_MANY_TO_ONE  = "ManyToOne";
-	public final static String MAPPING_MANY_TO_MANY = "ManyToMany";
-	public final static String MAPPING_UNKNOWN      = "Unknown";
+	public static final String MAPPING_ONE_TO_ONE   = "OneToOne";
+	public static final String MAPPING_ONE_TO_MANY  = "OneToMany";
+	public static final String MAPPING_MANY_TO_ONE  = "ManyToOne";
+	public static final String MAPPING_MANY_TO_MANY = "ManyToMany";
+	public static final String MAPPING_UNKNOWN      = "Unknown";
 	
-	public final static String MAPPING_TO_ONE   = "ToOne";
-	public final static String MAPPING_TO_MANY  = "ToMany";
+	public static final String MAPPING_TO_ONE   = "ToOne";
+	public static final String MAPPING_TO_MANY  = "ToMany";
 
-	public final static String CASCADE_ALL     = "ALL";
-	public final static String CASCADE_MERGE   = "MERGE";
-	public final static String CASCADE_PERSIST = "PERSIST";
-	public final static String CASCADE_REFRESH = "REFRESH";
-	public final static String CASCADE_REMOVE  = "REMOVE";
+	public static final String CASCADE_ALL     = "ALL";
+	public static final String CASCADE_MERGE   = "MERGE";
+	public static final String CASCADE_PERSIST = "PERSIST";
+	public static final String CASCADE_REFRESH = "REFRESH";
+	public static final String CASCADE_REMOVE  = "REMOVE";
 		
-	public final static String FETCH_DEFAULT = "DEFAULT";
-	public final static String FETCH_EAGER   = "EAGER";
-	public final static String FETCH_LAZY    = "LAZY";
+	public static final String FETCH_DEFAULT = "DEFAULT";
+	public static final String FETCH_EAGER   = "EAGER";
+	public static final String FETCH_LAZY    = "LAZY";
 	
-	public final static String OPTIONAL_UNDEFINED = "UNDEFINED";
-	public final static String OPTIONAL_TRUE      = "TRUE";
-	public final static String OPTIONAL_FALSE     = "FALSE";
+	public static final String OPTIONAL_UNDEFINED = "UNDEFINED";
+	public static final String OPTIONAL_TRUE      = "TRUE";
+	public static final String OPTIONAL_FALSE     = "FALSE";
 	
-	public final static String SPECIAL_DATE_ONLY      = "D";
-	public final static String SPECIAL_TIME_ONLY      = "T";
-	public final static String SPECIAL_DATE_AND_TIME  = "DT";
+	public static final String SPECIAL_DATE_ONLY      = "D";
+	public static final String SPECIAL_TIME_ONLY      = "T";
+	public static final String SPECIAL_DATE_AND_TIME  = "DT";
 
 	//--------------------------------------------------------------------------------------------------
 	//--- XML <root> element 
-	public final static String ROOT_ELEMENT = "root";
+	public static final String ROOT_ELEMENT = "root";
 	
 	//--------------------------------------------------------------------------------------------------
 	//--- XML <tablelist> element and attributes
-	public final static String TABLELIST = "tableList";
-	public final static String TABLELIST_GENERATION            = "generation";
-	public final static String TABLELIST_DATABASE_NAME         = "databaseName";
-	public final static String TABLELIST_DATABASE_PRODUCT_NAME = "databaseProductName";
-	public final static String TABLELIST_DATABASE_ID           = "databaseId";
+	public static final String TABLELIST = "tableList";
+	public static final String TABLELIST_GENERATION            = "generation";
+	public static final String TABLELIST_DATABASE_NAME         = "databaseName";
+	public static final String TABLELIST_DATABASE_PRODUCT_NAME = "databaseProductName";
+	public static final String TABLELIST_DATABASE_ID           = "databaseId";
 
 	//--------------------------------------------------------------------------------------------------
 	//--- XML <table> element and attributes
-	public final static String TABLE = "table";
-	public final static String TABLE_NAME       = "name";
-	public final static String TABLE_CATALOG    = "catalog"; // v 1.0 #LGU
-	public final static String TABLE_SCHEMA     = "schema";  // v 1.0 #LGU
-	//public final static String TABLE_BOOLEAN_STORAGE = "booleanStorage";
-	public final static String TABLE_JAVA_BEAN      = "javaBean";
-//	public final static String TABLE_JAVA_BEAN_LIST = "javaBeanList"; // removed in v 2.0.7
-//	public final static String TABLE_JAVA_BEAN_DAO  = "javaBeanDAO";// removed in v 2.0.7
-//	public final static String TABLE_JAVA_BEAN_CONV = "javaBeanConv";// removed in v 2.0.7
-	public final static String TABLE_DATABASE_TYPE  = "databaseType"; // added in v 2.0.7
+	public static final String TABLE = "table";
+	public static final String TABLE_NAME       = "name";
+	public static final String TABLE_CATALOG    = "catalog"; 
+	public static final String TABLE_SCHEMA     = "schema";  
+	public static final String TABLE_JAVA_BEAN         = "javaBean";
+	public static final String TABLE_DATABASE_TYPE     = "databaseType"; // added in v 2.0.7
+	public static final String TABLE_DATABASE_COMMENT  = "databaseComment"; // added in v 3.0.3
+	
 
 	//--------------------------------------------------------------------------------------------------
 	//--- XML <column> element and attributes
-	public final static String COLUMN = "column";
+	public static final String COLUMN = "column";
 	
-	public final static String COLUMN_SELECTED            = "selected";
+	public static final String COLUMN_SELECTED            = "selected";
 	
-	public final static String COLUMN_DB_NAME             = "dbName";
-	public final static String COLUMN_DB_TYPE_NAME        = "dbTypeName";
-	public final static String COLUMN_DB_SIZE             = "dbSize";
-	public final static String COLUMN_DB_NOTNULL          = "dbNotNull";
-	public final static String COLUMN_DB_PRIMARY_KEY      = "dbPrimaryKey";
+	public static final String COLUMN_DB_NAME             = "dbName";
+	public static final String COLUMN_DB_TYPE_NAME        = "dbTypeName";
+	public static final String COLUMN_DB_SIZE             = "dbSize";
+	public static final String COLUMN_DB_NOTNULL          = "dbNotNull";
+	public static final String COLUMN_DB_PRIMARY_KEY      = "dbPrimaryKey";
 	public static final String COLUMN_DB_FOREIGN_KEY      = "dbForeignKey"; // v 0.9.0
 	public static final String COLUMN_DB_AUTO_INCREMENTED = "dbAutoIncremented"; // v 1.0  #LGU 04/08/2011
 	public static final String COLUMN_DB_POSITION         = "dbPosition"; // v 1.0  #LGU 10/08/2011
 	public static final String COLUMN_DB_DEFAULT_VALUE    = "dbDefaultValue"; // v 1.0  #LGU 10/08/2011
 	public static final String COLUMN_DB_COMMENT          = "dbComment"; // v 2.1.1 #LCH 20/08/2014
 	
-	public final static String COLUMN_JDBC_TYPE_CODE      = "jdbcTypeCode";
+	public static final String COLUMN_JDBC_TYPE_CODE      = "jdbcTypeCode";
 
-	public final static String COLUMN_JAVA_NAME           = "javaName";
-	public final static String COLUMN_JAVA_TYPE           = "javaType";
-	public final static String COLUMN_JAVA_DEFAULT_VALUE  = "javaDefaultValue"; // v 1.0  #LGU 17/10/2011
+	public static final String COLUMN_JAVA_NAME           = "javaName";
+	public static final String COLUMN_JAVA_TYPE           = "javaType";
+	public static final String COLUMN_JAVA_DEFAULT_VALUE  = "javaDefaultValue"; // v 1.0  #LGU 17/10/2011
 	
 	//--- Further informations 
-	public final static String COLUMN_NOT_NULL          = "notNull"; // v 1.0  #LGU 30/08/2011
+	public static final String COLUMN_NOT_NULL          = "notNull"; // v 1.0  #LGU 30/08/2011
 	
-	public final static String COLUMN_LONG_TEXT         = "longText";
-	public final static String COLUMN_NOT_EMPTY         = "notEmpty";// v 1.0  #LGU 30/08/2011
-	public final static String COLUMN_NOT_BLANK         = "notBlank";// v 1.0  #LGU 30/08/2011
-	public final static String COLUMN_MIN_LENGTH        = "minLength";// v 1.0  #LGU 01/09/2011
-	public final static String COLUMN_MAX_LENGTH        = "maxLength";// v 1.0  #LGU 01/09/2011
-	public final static String COLUMN_PATTERN           = "pattern";// v 1.0  #LGU 01/09/2011
+	public static final String COLUMN_LONG_TEXT         = "longText";
+	public static final String COLUMN_NOT_EMPTY         = "notEmpty";// v 1.0  #LGU 30/08/2011
+	public static final String COLUMN_NOT_BLANK         = "notBlank";// v 1.0  #LGU 30/08/2011
+	public static final String COLUMN_MIN_LENGTH        = "minLength";// v 1.0  #LGU 01/09/2011
+	public static final String COLUMN_MAX_LENGTH        = "maxLength";// v 1.0  #LGU 01/09/2011
+	public static final String COLUMN_PATTERN           = "pattern";// v 1.0  #LGU 01/09/2011
 	
-	public final static String COLUMN_BOOL_TRUE         = "boolTrue";
-	public final static String COLUMN_BOOL_FALSE        = "boolFalse";
+	public static final String COLUMN_BOOL_TRUE         = "boolTrue";
+	public static final String COLUMN_BOOL_FALSE        = "boolFalse";
 	
-	public final static String COLUMN_DATE_TYPE         = "dateType";
-	public final static String COLUMN_DATE_PAST         = "datePast"; // v 1.0  #LGU 30/08/2011
-	public final static String COLUMN_DATE_FUTURE       = "dateFuture";// v 1.0  #LGU 30/08/2011
-	public final static String COLUMN_DATE_BEFORE       = "dateBefore";// v 1.0  #LGU 30/08/2011
-	public final static String COLUMN_DATE_BEFORE_VALUE = "dateBeforeValue";// v 1.0  #LGU 30/08/2011
-	public final static String COLUMN_DATE_AFTER        = "dateAfter";// v 1.0  #LGU 30/08/2011
-	public final static String COLUMN_DATE_AFTER_VALUE  = "dateAfterValue";// v 1.0  #LGU 30/08/2011
+	public static final String COLUMN_DATE_TYPE         = "dateType";
+	public static final String COLUMN_DATE_PAST         = "datePast"; // v 1.0  #LGU 30/08/2011
+	public static final String COLUMN_DATE_FUTURE       = "dateFuture";// v 1.0  #LGU 30/08/2011
+	public static final String COLUMN_DATE_BEFORE       = "dateBefore";// v 1.0  #LGU 30/08/2011
+	public static final String COLUMN_DATE_BEFORE_VALUE = "dateBeforeValue";// v 1.0  #LGU 30/08/2011
+	public static final String COLUMN_DATE_AFTER        = "dateAfter";// v 1.0  #LGU 30/08/2011
+	public static final String COLUMN_DATE_AFTER_VALUE  = "dateAfterValue";// v 1.0  #LGU 30/08/2011
 	
-	public final static String COLUMN_MIN_VALUE         = "minValue"; // v 1.0  #LGU 31/08/2011
-	public final static String COLUMN_MAX_VALUE         = "maxValue"; // v 1.0  #LGU 31/08/2011
+	public static final String COLUMN_MIN_VALUE         = "minValue"; // v 1.0  #LGU 31/08/2011
+	public static final String COLUMN_MAX_VALUE         = "maxValue"; // v 1.0  #LGU 31/08/2011
 
-	public final static String COLUMN_FORMAT            = "format"; // v 1.0  #LGU 31/08/2011
+	public static final String COLUMN_FORMAT            = "format"; // v 1.0  #LGU 31/08/2011
 	
-	public final static String COLUMN_LABEL             = "label"; // v 2.0.3  #LGU 20/02/2013
-	public final static String COLUMN_INPUT_TYPE        = "inputType"; // v 2.0.3  #LGU 20/02/2013
+	public static final String COLUMN_LABEL             = "label"; // v 2.0.3  #LGU 20/02/2013
+	public static final String COLUMN_INPUT_TYPE        = "inputType"; // v 2.0.3  #LGU 20/02/2013
 	
 	//--------------------------------------------------------------------------------------------------
 	//--- XML <fk> element and attributes
@@ -244,17 +216,15 @@ public class RepositoryConst {
 	
 
 	//--------------------------------------------------------------------------------------------------
-	private final static String DATE_TIME_ISO_FORMAT = "yyyy-MM-dd HH:mm:ss" ; // v 2.1.1
+	private static final String DATE_TIME_ISO_FORMAT = "yyyy-MM-dd HH:mm:ss" ; 
 	
-	//public static Date getDate(final String p_date) {
-	public static Date parseDate(final String p_date) { // v 2.1.1
+	public static Date parseDate(final String sDate) { 
 		Date date = null;
 		try {
-			//date = RepositoryConst.DATE_TIME_ISO_FORMAT.parse(p_date);
-			SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_TIME_ISO_FORMAT); // v 2.1.1
-			date = dateFormat.parse(p_date);
+			SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_TIME_ISO_FORMAT); 
+			date = dateFormat.parse(sDate);
 		} catch (ParseException e) {
-			throw new RuntimeException("date parsing impossible" + p_date, e);
+			throw new RuntimeException("date parsing impossible" + sDate, e);
 		}
 		return date;
 	}

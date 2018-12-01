@@ -36,30 +36,27 @@ import org.telosys.tools.generic.model.Link;
  * @author Laurent Guerin
  *
  */
-//public class EntityInDbModel implements Comparable<EntityInDbModel>, Serializable, Entity
 public class EntityInDbModel implements Serializable, Entity // v 3.0.0 ( 2 specific comparators )
 {
 	private static final long serialVersionUID = 1L;
 
-//	private String name ;
 	private String databaseTable ;
 	
-//	private String catalog ; 
 	private String databaseCatalog ; 
 	
-//	private String schema ; 
 	private String databaseSchema ;  // v 3.0.0
 
 	private String databaseType ; // v 2.0.7 #LGU
 	
-//	private String beanJavaClass ;
+	private String databaseComment = "";  // v 3.1.0
+
 	private String className ; // v 3.0.0
 	
-	private Hashtable<String,AttributeInDbModel>  attributes  = new Hashtable<String,AttributeInDbModel>() ; 
+	private Hashtable<String,AttributeInDbModel>  attributes  = new Hashtable<>() ; 
 
-	private Hashtable<String,ForeignKeyInDbModel> foreignKeys = new Hashtable<String,ForeignKeyInDbModel>() ;
+	private Hashtable<String,ForeignKeyInDbModel> foreignKeys = new Hashtable<>() ;
 
-	private Hashtable<String,LinkInDbModel>       links       = new Hashtable<String,LinkInDbModel>() ;
+	private Hashtable<String,LinkInDbModel>       links       = new Hashtable<>() ;
 
 	
 	/**
@@ -100,16 +97,14 @@ public class EntityInDbModel implements Serializable, Entity // v 3.0.0 ( 2 spec
 				
 		//--- Check if all the columns are in the Primary Key
 		for ( AttributeInDbModel column : getAttributesArray() ) {
-			//if ( ! column.isPrimaryKey() ) {
-			if ( ! column.isKeyElement() ) { // v 3.0.0
+			if ( ! column.isKeyElement() ) { 
 				return false ;
 			}
 		}
 		
 		//--- Check if all the columns are in a Foreign Key
 		for ( AttributeInDbModel attribute : getAttributesArray() ) {
-			//if ( ! attribute.isUsedInForeignKey() ) {
-			if ( ! attribute.isFK() ) { // v 3.0.0
+			if ( ! attribute.isFK() ) { 
 				return false ;
 			}
 		}
@@ -118,18 +113,6 @@ public class EntityInDbModel implements Serializable, Entity // v 3.0.0 ( 2 spec
 	}
 
 	//--------------------------------------------------------------------------
-	
-//	/**
-//	 * Returns the name of the entity ( i.e. the database table name )
-//	 * @return
-//	 */
-//	public String getName() {
-//		return name;
-//	}
-//	public void setName(String name) {
-//		this.name = name;
-//	}
-	
 	@Override
 	public String getDatabaseTable() {
 		return this.databaseTable;
@@ -139,24 +122,6 @@ public class EntityInDbModel implements Serializable, Entity // v 3.0.0 ( 2 spec
 	}
 	
 	//--------------------------------------------------------------------------
-	
-//	/**
-//	 * Returns the database schema of the entity 
-//	 * @return
-//	 * @since 1.0
-//	 */
-//	public String getSchema() {
-//		return schema;
-//	}
-//	/**
-//	 * Set the database schema of the entity 
-//	 * @param s
-//	 * @since 1.0
-//	 */
-//	public void setSchema(String s) {
-//		this.schema = s;
-//	}
-
 	@Override
 	public String getDatabaseSchema() {
 		return this.databaseSchema ;
@@ -169,6 +134,13 @@ public class EntityInDbModel implements Serializable, Entity // v 3.0.0 ( 2 spec
 		this.databaseSchema = s;
 	}
 
+	//--------------------------------------------------------------------------
+	public String getDatabaseComment() {
+		return databaseComment;
+	}
+	public void setDatabaseComment(String s) {
+		this.databaseComment = s;
+	}	
 	
 	//--------------------------------------------------------------------------
 	
@@ -207,22 +179,6 @@ public class EntityInDbModel implements Serializable, Entity // v 3.0.0 ( 2 spec
 	}
 	
 	//--------------------------------------------------------------------------
-	
-//	/**
-//	 * Returns the database catalog of the entity 
-//	 * @return
-//	 */
-//	public String getCatalog() {
-//		return catalog ;
-//	}
-//	/**
-//	 * Set the database catalog of the entity 
-//	 * @param s
-//	 */
-//	public void setCatalog(String s) {
-//		this.catalog = s;
-//	}
-	
 	@Override
 	public String getDatabaseCatalog() {
 		return this.databaseCatalog;
@@ -238,20 +194,6 @@ public class EntityInDbModel implements Serializable, Entity // v 3.0.0 ( 2 spec
 
 
 	//--------------------------------------------------------------------------
-	
-//	/**
-//	 * Returns the short name of the VO bean Java Class ( without the package ) 
-//	 * Example : "Book" or "BookVO"
-//	 * @return
-//	 */
-//	public String getBeanJavaClass() {
-//		return beanJavaClass;
-//	}
-//
-//	public void setBeanJavaClass(String beanJavaClass) {
-//		this.beanJavaClass = beanJavaClass;
-//	}
-	
 	@Override
 	public String getClassName() {
 		return this.className;
@@ -289,44 +231,24 @@ public class EntityInDbModel implements Serializable, Entity // v 3.0.0 ( 2 spec
 	 * 
 	 * @return
 	 */
-	public AttributeInDbModel[] getAttributesArray()
-	{
-		//return (Column[]) columns.values().toArray(new Column[columns.size()]);
+	public AttributeInDbModel[] getAttributesArray() {
 		AttributeInDbModel[] cols = (AttributeInDbModel[]) ( attributes.values().toArray( new AttributeInDbModel[attributes.size()] ) );
 		Arrays.sort(cols); // sort using the "Comparable" implementation
 		return cols ;
 	}
 
-//	/**
-//	 * Returns a collection of all the columns of the entity.<br>
-//	 * The columns are sorted by ordinal position (the original database order).
-//	 * 
-//	 * @return
-//	 */
-//	public Collection<AttributeInDbModel> getColumnsCollection()
-//	{
-//		//return this.columns.values();
-//		AttributeInDbModel[] cols = getColumns();
-//		return Arrays.asList(cols);
-//	}
-	
-//	public void storeColumn(AttributeInDbModel column)
-	public void storeAttribute(AttributeInDbModel attribute)  // renamed in v 3.0.0
-	{
+	public void storeAttribute(AttributeInDbModel attribute) { // 'storeColumn' renamed in v 3.0.0
 		if ( attribute.getEntity() != this ) {
 			throw new IllegalStateException("Invalid entity in attribute '" + attribute.getName() + "'");
 		}
 		attributes.put(attribute.getDatabaseName(), attribute);
 	}
 
-	public AttributeInDbModel getAttributeByColumnName(String name)
-	{
-		return (AttributeInDbModel) attributes.get(name);
+	public AttributeInDbModel getAttributeByColumnName(String name) {
+		return attributes.get(name);
 	}
 
-//	public void removeColumn(AttributeInDbModel column)
-	public void removeAttribute(AttributeInDbModel attribute) // renamed in v 3.0.0
-	{
+	public void removeAttribute(AttributeInDbModel attribute) { // 'removeColumn' renamed in v 3.0.0
 		attributes.remove(attribute.getDatabaseName());
 	}
 
@@ -335,10 +257,9 @@ public class EntityInDbModel implements Serializable, Entity // v 3.0.0 ( 2 spec
 	//--------------------------------------------------------------------------
 	@Override
 	public List<Attribute> getAttributes() {
-		//Attribute[] attributes = getAttributesArray() ;
-		Attribute[] attributes = getAttributesArray();
-		LinkedList<Attribute> attributesList = new LinkedList<Attribute>();
-		for ( Attribute a : attributes ) {
+		Attribute[] attributesArray = getAttributesArray();
+		LinkedList<Attribute> attributesList = new LinkedList<>();
+		for ( Attribute a : attributesArray ) {
 			attributesList.add(a);
 		}
 		return attributesList ;
@@ -360,31 +281,15 @@ public class EntityInDbModel implements Serializable, Entity // v 3.0.0 ( 2 spec
 		return array ;
 	}
 	
-//	/**
-//	 * Returns a collection of all the foreign keys of the entity (table).<br>
-//	 * The foreign keys are sorted by name.
-//	 * @return
-//	 */
-//	public Collection<ForeignKeyInDbModel> getForeignKeysCollection()
-//	{
-//		//return foreignKeys.values() ;
-//		ForeignKeyInDbModel[] array = getForeignKeys();
-//		return Arrays.asList(array);
-//		
-//	}
-	
-	public void storeForeignKey(ForeignKeyInDbModel foreignKey)
-	{
+	public void storeForeignKey(ForeignKeyInDbModel foreignKey) {
 		foreignKeys.put(foreignKey.getName(), foreignKey);
 	}
 	
-	public ForeignKeyInDbModel getForeignKey(String name)
-	{
-		return (ForeignKeyInDbModel) foreignKeys.get(name);
+	public ForeignKeyInDbModel getForeignKey(String name) {
+		return foreignKeys.get(name);
 	}
 	
-	public void removeForeignKey(ForeignKeyInDbModel foreignKey)
-	{
+	public void removeForeignKey(ForeignKeyInDbModel foreignKey) {
 		foreignKeys.remove(foreignKey.getName() );
 	}
 
@@ -397,7 +302,7 @@ public class EntityInDbModel implements Serializable, Entity // v 3.0.0 ( 2 spec
 		ForeignKey[] foreignKeysArray = (ForeignKey[]) foreignKeys.values().toArray( new ForeignKey[foreignKeys.size()] );
 		Arrays.sort(foreignKeysArray); // sort using the "Comparable" implementation		
 		//--- Build a List from the array
-		LinkedList<ForeignKey> foreignKeysList = new LinkedList<ForeignKey>();
+		LinkedList<ForeignKey> foreignKeysList = new LinkedList<>();
 		for ( ForeignKey fk : foreignKeysArray ) {
 			foreignKeysList.add(fk);
 		}
@@ -430,7 +335,7 @@ public class EntityInDbModel implements Serializable, Entity // v 3.0.0 ( 2 spec
 	 * @return
 	 */
 	public List<LinkInDbModel> getAllLinks() {
-		List<LinkInDbModel> list = new LinkedList<LinkInDbModel>();
+		List<LinkInDbModel> list = new LinkedList<>();
 		for ( LinkInDbModel link : links.values() ) {
 			list.add(link);
 		}
@@ -443,7 +348,7 @@ public class EntityInDbModel implements Serializable, Entity // v 3.0.0 ( 2 spec
 	 * @return
 	 */
 	public List<LinkInDbModel> getSelectedLinks() {
-		List<LinkInDbModel> list = new LinkedList<LinkInDbModel>();
+		List<LinkInDbModel> list = new LinkedList<>();
 		for ( LinkInDbModel link : links.values() ) {
 			if ( link.isSelected() ) {
 				list.add(link);
@@ -453,8 +358,7 @@ public class EntityInDbModel implements Serializable, Entity // v 3.0.0 ( 2 spec
 	}
 
 	@Override
-	public List<Link> getLinks()
-	{
+	public List<Link> getLinks() {
 		Link[] linksArray = links.values().toArray(new Link[links.size()]);
 		return Arrays.asList(linksArray);
 	}
@@ -464,9 +368,8 @@ public class EntityInDbModel implements Serializable, Entity // v 3.0.0 ( 2 spec
 	 * @return
 	 * @since 2.1.1
 	 */
-	public List<LinkInDbModel> getLinksTo(String entityName)
-	{
-		LinkedList<LinkInDbModel> selectedLinks = new LinkedList<LinkInDbModel>();
+	public List<LinkInDbModel> getLinksTo(String entityName) {
+		LinkedList<LinkInDbModel> selectedLinks = new LinkedList<>();
 		for ( LinkInDbModel link : links.values() ) {
 			if ( link.getTargetTableName().equals(entityName) ) {
 				selectedLinks.add(link);
@@ -475,21 +378,11 @@ public class EntityInDbModel implements Serializable, Entity // v 3.0.0 ( 2 spec
 		return selectedLinks;
 	}
 	
-//	/**
-//	 * Returns all the links of the entity
-//	 * @return
-//	 */
-//	public Collection<LinkInDbModel> getLinksCollection()
-//	{
-//		return links.values() ;
-//	}
-//	
 	/**
 	 * Store (add or update the given link)
 	 * @param link
 	 */
-	public void storeLink(LinkInDbModel link)
-	{
+	public void storeLink(LinkInDbModel link) {
 		links.put(link.getId(), link);
 	}
 	
@@ -498,17 +391,15 @@ public class EntityInDbModel implements Serializable, Entity // v 3.0.0 ( 2 spec
 	 * @param id
 	 * @return
 	 */
-	public LinkInDbModel getLink(String id)
-	{
-		return (LinkInDbModel) links.get(id);
+	public LinkInDbModel getLink(String id) {
+		return links.get(id);
 	}
 	
 	/**
 	 * Remove the given link from the entity
 	 * @param link
 	 */
-	public int removeLink(LinkInDbModel link)
-	{
+	public int removeLink(LinkInDbModel link) {
 		LinkInDbModel linkRemoved = links.remove( link.getId() );
 		return linkRemoved != null ? 1 : 0 ;
 	}
@@ -516,8 +407,7 @@ public class EntityInDbModel implements Serializable, Entity // v 3.0.0 ( 2 spec
 	/**
 	 * Remove all the links from the entity
 	 */
-	public void removeAllLinks()
-	{
+	public void removeAllLinks() {
 		links.clear();
 	}
 
@@ -525,11 +415,8 @@ public class EntityInDbModel implements Serializable, Entity // v 3.0.0 ( 2 spec
 	/* (non-Javadoc)
 	 * @see java.lang.Comparable#compareTo(T)
 	 */
-//	@Override
 	public int compareTo(EntityInDbModel other) {
 		if ( other != null ) {
-//			String sThisName = this.getName() ;
-//			String sOtherName = other.getName();
 			String sThisName = this.getDatabaseTable() ;
 			String sOtherName = other.getDatabaseTable();
 			if ( sThisName != null && sOtherName != null ) {
@@ -541,28 +428,19 @@ public class EntityInDbModel implements Serializable, Entity // v 3.0.0 ( 2 spec
 
 	@Override
 	public String toString() {
-//		return  name 
-//				+ "|"  + catalog 
-//				+ "|"   + schema 
-//				+ "|" + databaseType
-//				+ "|" + beanJavaClass 
-//				+ "|columns=" + columns.size()
-//				+ "|foreignKeys=" + foreignKeys.size() 
-//				+ "|links=" + links.size() 
-//				;
 		return  className 
 				+ "|" + databaseTable
 				+ "|" + databaseCatalog 
 				+ "|" + databaseSchema 
 				+ "|" + databaseType
+				// + "|" + databaseComment
 				+ "|columns=" + attributes.size()
 				+ "|foreignKeys=" + foreignKeys.size() 
 				+ "|links=" + links.size() 
 				;
 	}
 	
-	public boolean hasPrimaryKey() 
-	{
+	public boolean hasPrimaryKey() {
 		for ( AttributeInDbModel attribute : this.attributes.values() ) {
 			if ( attribute.isKeyElement() ) {
 				return true ;
@@ -573,7 +451,7 @@ public class EntityInDbModel implements Serializable, Entity // v 3.0.0 ( 2 spec
 
 	@Override
 	public List<String> getWarnings() {
-		List<String> warnings = new LinkedList<String>() ;
+		List<String> warnings = new LinkedList<>() ;
 		if ( hasPrimaryKey() == false ) {
 			warnings.add("No Primary Key");
 		}

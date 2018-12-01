@@ -26,41 +26,26 @@ public class EntityWrapper {
 		super();
 	}
 
-	public EntityInDbModel getEntity(final Element table) {
+	public EntityInDbModel getEntity(final Element xmlElement) {
 		final EntityInDbModel entity = new EntityInDbModel();
-//		entity.setBeanJavaClass(table.getAttribute(RepositoryConst.TABLE_JAVA_BEAN));
-		entity.setClassName(table.getAttribute(RepositoryConst.TABLE_JAVA_BEAN)); // v 3.0.0
-		
-//		entity.setName(table.getAttribute(RepositoryConst.TABLE_NAME));
-		entity.setDatabaseTable(table.getAttribute(RepositoryConst.TABLE_NAME)); // v 3.0.0
-		
-//		entity.setCatalog(table.getAttribute(RepositoryConst.TABLE_CATALOG)); 
-		entity.setDatabaseCatalog(table.getAttribute(RepositoryConst.TABLE_CATALOG));  // v 3.0.0
-		
-//		entity.setSchema(table.getAttribute(RepositoryConst.TABLE_SCHEMA));
-		entity.setDatabaseSchema(table.getAttribute(RepositoryConst.TABLE_SCHEMA)); // v 3.0.0
-		
-		entity.setDatabaseType(table.getAttribute(RepositoryConst.TABLE_DATABASE_TYPE)); // added in v 2.0.7
+		entity.setClassName(xmlElement.getAttribute(RepositoryConst.TABLE_JAVA_BEAN)); // v 3.0.0
+		entity.setDatabaseTable(xmlElement.getAttribute(RepositoryConst.TABLE_NAME)); // v 3.0.0
+		entity.setDatabaseCatalog(xmlElement.getAttribute(RepositoryConst.TABLE_CATALOG));  // v 3.0.0
+		entity.setDatabaseSchema(xmlElement.getAttribute(RepositoryConst.TABLE_SCHEMA)); // v 3.0.0
+		entity.setDatabaseType(xmlElement.getAttribute(RepositoryConst.TABLE_DATABASE_TYPE)); // added in v 2.0.7
+		entity.setDatabaseComment(xmlElement.getAttribute(RepositoryConst.TABLE_DATABASE_COMMENT)); // added in v 3.0.3 ( Dec 2018 )
 		return entity;
 	}
 
 	public Element getXmlDesc(final EntityInDbModel entity, final Document doc) {
-		final Element table = doc.createElement(RepositoryConst.TABLE);
-		
-//		table.setAttribute(RepositoryConst.TABLE_JAVA_BEAN, entity.getBeanJavaClass());
-		table.setAttribute(RepositoryConst.TABLE_JAVA_BEAN, entity.getClassName()); // v 3.0.0
-		
-//		table.setAttribute(RepositoryConst.TABLE_NAME, entity.getName());		
-		table.setAttribute(RepositoryConst.TABLE_NAME, entity.getDatabaseTable());	// v 3.0.0	
-
-//		table.setAttribute(RepositoryConst.TABLE_CATALOG, entity.getCatalog());
-		table.setAttribute(RepositoryConst.TABLE_CATALOG, entity.getDatabaseCatalog()); // v 3.0.0
-		
-//		table.setAttribute(RepositoryConst.TABLE_SCHEMA, entity.getSchema());
-		table.setAttribute(RepositoryConst.TABLE_SCHEMA, entity.getDatabaseSchema()); // v 3.0.0
-		
-		table.setAttribute(RepositoryConst.TABLE_DATABASE_TYPE, entity.getDatabaseType()); // added in v 2.0.7
-		return table;
+		final Element xmlElement = doc.createElement(RepositoryConst.TABLE);
+		xmlElement.setAttribute(RepositoryConst.TABLE_JAVA_BEAN, entity.getClassName()); // v 3.0.0
+		xmlElement.setAttribute(RepositoryConst.TABLE_NAME, entity.getDatabaseTable());	// v 3.0.0	
+		xmlElement.setAttribute(RepositoryConst.TABLE_CATALOG, entity.getDatabaseCatalog()); // v 3.0.0
+		xmlElement.setAttribute(RepositoryConst.TABLE_SCHEMA, entity.getDatabaseSchema()); // v 3.0.0
+		xmlElement.setAttribute(RepositoryConst.TABLE_DATABASE_TYPE, entity.getDatabaseType()); // added in v 2.0.7
+		xmlElement.setAttribute(RepositoryConst.TABLE_DATABASE_COMMENT, entity.getDatabaseComment()); // added in v 3.0.3 ( Dec 2018 )
+		return xmlElement;
 	}
 
 }
