@@ -28,43 +28,28 @@ import junit.env.telosys.tools.commons.LoggerProviderForUnitTests;
 
 public class DbModelGeneratorTest extends AbstractTestCase {
 	
-//	private TelosysToolsCfg getTelosysToolsCfg(String projectName) throws TelosysToolsException {
-//		File projectFolder = TestsEnv.getTestFolder(projectName);
-//		TelosysToolsCfgManager cfgManager = new TelosysToolsCfgManager(projectFolder.getAbsolutePath());
-//		TelosysToolsCfg telosysToolsCfg = cfgManager.loadTelosysToolsCfg();
-//		return telosysToolsCfg ;
+//	protected RepositoryModel generateDbModel(int sqlScriptId) throws TelosysToolsException {
+//		
+//		System.out.println("Database initialization... ");
+//		DatabaseInMemory databaseInMemory = new DatabaseInMemory(DATABASE_ID_1);
+//		databaseInMemory.executeSqlInit(sqlScriptId);
+//		
+//		System.out.println("Repository generation... ");
+//		DbModelGenerator dbModelGenerator = getDbModelGenerator(PROJECT_FOLDER) ;
+//		RepositoryModel repositoryModel = dbModelGenerator.generate( databaseInMemory.getDatabaseConfiguration() );
+//		
+//		databaseInMemory.close();
+//		
+//		return repositoryModel ;
 //	}
-
-//	private DbModelGenerator getDbModelGenerator() throws TelosysToolsException {
-//		TelosysToolsCfg telosysToolsCfg = getTelosysToolsCfg("project2") ;
-//		TelosysToolsLogger logger = LoggerProviderForUnitTests.getLogger();
-//		DbConnectionManager dbConnectionManager = new DbConnectionManager(telosysToolsCfg);
-//		RepositoryRules rules = RepositoryRulesProvider.getRepositoryRules() ;
-//		return new DbModelGenerator(dbConnectionManager, rules, logger);
-//	}
-
-	protected RepositoryModel generateDbModel(int sqlScriptId) throws TelosysToolsException {
-		
-		System.out.println("Database initialization... ");
-		DatabaseInMemory databaseInMemory = new DatabaseInMemory(DATABASE_ID_1);
-		databaseInMemory.executeSqlInit(sqlScriptId);
-		
-		System.out.println("Repository generation... ");
-		DbModelGenerator dbModelGenerator = getDbModelGenerator(PROJECT_FOLDER) ;
-		RepositoryModel repositoryModel = dbModelGenerator.generate( databaseInMemory.getDatabaseConfiguration() );
-		
-		databaseInMemory.close();
-		
-		return repositoryModel ;
-	}
 
 	@Test
 	public void test1() throws TelosysToolsException {
 		printSeparator("test1");
 
-		RepositoryModel repositoryModel = generateDbModel(1);
+		RepositoryModel repositoryModel = generateRepositoryModel(1);
 		printModel(repositoryModel);
-		assertTrue(repositoryModel.getDatabaseId() == DATABASE_ID_1 );
+		assertTrue(repositoryModel.getDatabaseId() == DEFAULT_DATABASE_ID );
 		assertEquals(2, repositoryModel.getNumberOfEntities() );
 
 		EntityInDbModel customerEntity = repositoryModel.getEntityByTableName("CUSTOMER") ;
@@ -84,9 +69,9 @@ public class DbModelGeneratorTest extends AbstractTestCase {
 	public void test2() throws TelosysToolsException {
 		printSeparator("test2");
 		
-		RepositoryModel repositoryModel = generateDbModel(2);
+		RepositoryModel repositoryModel = generateRepositoryModel(2);
 		printModel(repositoryModel);
-		assertTrue(repositoryModel.getDatabaseId() == DATABASE_ID_1 );
+		assertTrue(repositoryModel.getDatabaseId() == DEFAULT_DATABASE_ID );
 		assertEquals(2, repositoryModel.getNumberOfEntities() );
 
 		EntityInDbModel studentEntity = repositoryModel.getEntityByTableName("STUDENT");
@@ -133,9 +118,9 @@ public class DbModelGeneratorTest extends AbstractTestCase {
 	public void test3() throws TelosysToolsException {
 		printSeparator("test3");
 		
-		RepositoryModel repositoryModel = generateDbModel(3);
+		RepositoryModel repositoryModel = generateRepositoryModel(3);
 		printModel(repositoryModel);
-		assertTrue(repositoryModel.getDatabaseId() == DATABASE_ID_1 );
+		assertTrue(repositoryModel.getDatabaseId() == DEFAULT_DATABASE_ID );
 		assertEquals(2, repositoryModel.getNumberOfEntities() );
 
 		EntityInDbModel studentEntity = repositoryModel.getEntityByTableName("STUDENT");
@@ -160,7 +145,7 @@ public class DbModelGeneratorTest extends AbstractTestCase {
 	public void test4() throws TelosysToolsException {
 		printSeparator("test4");
 		
-		RepositoryModel repositoryModel = generateDbModel(4);
+		RepositoryModel repositoryModel = generateRepositoryModel(4);
 		printModel(repositoryModel);
 		assertEquals(3, repositoryModel.getNumberOfEntities() );
 
@@ -248,7 +233,7 @@ public class DbModelGeneratorTest extends AbstractTestCase {
 	public void test5() throws TelosysToolsException {
 		printSeparator("test5");
 		
-		RepositoryModel repositoryModel = generateDbModel(5);
+		RepositoryModel repositoryModel = generateRepositoryModel(5);
 		printModel(repositoryModel);
 		assertEquals(2, repositoryModel.getNumberOfEntities() );
 

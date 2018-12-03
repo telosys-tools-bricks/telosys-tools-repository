@@ -29,14 +29,15 @@ import org.telosys.tools.repository.model.EntityInDbModel;
  */
 public class ChangeOnEntity {
 	
-	private final String      entityName ;
-	private final ChangeType  changeType ;
-	private final EntityInDbModel      entityBefore ;
-	private final EntityInDbModel      entityAfter ;
+	private final String           entityName ;
+	private final ChangeType       changeType ;
+	private final EntityInDbModel  entityBefore ;
+	private final EntityInDbModel  entityAfter ;
 
-	private final List<ChangeOnColumn>     changesOnColumns     = new LinkedList<ChangeOnColumn>();
-	private final List<ChangeOnForeignKey> changesOnForeignKeys = new LinkedList<ChangeOnForeignKey>();
-	private boolean databaseTypeHasChanged = false ; 
+	private final List<ChangeOnColumn>     changesOnColumns     = new LinkedList<>();
+	private final List<ChangeOnForeignKey> changesOnForeignKeys = new LinkedList<>();
+	private boolean databaseTypeHasChanged    = false ; 
+	private boolean databaseCommentHasChanged = false ;  // since DbModel 3.0.3 (dec 2018)
 
 	private void check(boolean expression, String errorMessage ) {
 		if ( expression != true ) throw new RuntimeException(errorMessage);
@@ -57,21 +58,16 @@ public class ChangeOnEntity {
 		if ( changeType == ChangeType.CREATED ) {
 			check ( entityBefore == null , "Entity CREATED must not have a 'before state'" ) ;
 			check ( entityAfter  != null , "Entity CREATED must have an 'after state'" ) ;
-//			this.entityName = entityAfter.getName();
 			this.entityName = entityAfter.getDatabaseTable();
 		}
 		else if ( changeType == ChangeType.DELETED ) {
 			check ( entityBefore != null , "Entity DELETED must have a 'before state'" ) ;
 			check ( entityAfter  == null , "Entity DELETED must not have an 'after state'" ) ;
-//			this.entityName = entityBefore.getName();
 			this.entityName = entityBefore.getDatabaseTable();
 		}
 		else if ( changeType == ChangeType.UPDATED ) {
 			check ( entityBefore != null , "Entity UPDATED must have a 'before state'" ) ;
 			check ( entityAfter  != null , "Entity UPDATED must have an 'after state'" ) ;
-			//check ( entityBefore.getName().equals(entityAfter.getName()), "Entity name is different between 'after' and 'before'");
-//			check ( StrUtil.identical(entityBefore.getName(), entityAfter.getName() ), "Entity name is different between 'after' and 'before'");
-//			this.entityName = entityAfter.getName();
 			check ( StrUtil.identical(entityBefore.getDatabaseTable(), entityAfter.getDatabaseTable() ), "Entity name is different between 'after' and 'before'");
 			this.entityName = entityAfter.getDatabaseTable();
 		}
@@ -174,11 +170,35 @@ public class ChangeOnEntity {
 	
 	//----------------------------------------------------------------------------------------------------------
 	/**
+	 * Set change flag for 'comment'
+	 * @param value
+	 * @since DbModel 3.0.3 (dec 2018)
+	 */
+	public void setDatabaseCommentHasChanged(boolean value) {
+		databaseCommentHasChanged = value ;
+	}
+	/**
+	 * Get change flag for 'comment'
+	 * @return
+	 * @since DbModel 3.0.3 (dec 2018)
+	 */
+	public boolean isDatabaseCommentHasChanged() {
+		return databaseCommentHasChanged ;
+	}
+	
+	//----------------------------------------------------------------------------------------------------------
+	/**
 	 * Return the number of changes for this entity <br>
 	 * Number of changes on column + number of changes on FK + database type change
 	 * @return
 	 */
 	public int getNumberOfChanges() {
-		return changesOnColumns.size() + changesOnForeignKeys.size() + ( databaseTypeHasChanged ? 1 : 0 );
+		//return changesOnColumns.size() + changesOnForeignKeys.size() + ( databaseTypeHasChanged ? 1 : 0 );
+		int count = 0 ;
+		count += databaseTypeHasChanged ? 1 : 0 ;
+		count += databaseCommentHasChanged ? 1 : 0 ;
+		count += changesOnColumns.size() ;
+		count += changesOnForeignKeys.size() ;
+		return count ;
 	}
 }

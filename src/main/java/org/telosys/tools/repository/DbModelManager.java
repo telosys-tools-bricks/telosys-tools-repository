@@ -136,6 +136,7 @@ public abstract class DbModelManager
 		entity.setDatabaseCatalog( dbTable.getCatalogName() ); 
 		entity.setDatabaseSchema( dbTable.getSchemaName() ); 
 		entity.setDatabaseType( dbTable.getTableType() ) ; 
+		entity.setDatabaseComment( dbTable.getComment() );
 		
 		//--- Add the columns of this table
 		addColumns( entity, dbTable) ;

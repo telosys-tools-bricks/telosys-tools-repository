@@ -17,7 +17,7 @@ public class DatabaseInMemoryTest extends AbstractTestCase {
 	public void testExecSqlscript() throws TelosysToolsException, SQLException {
 		printSeparator("testExecSqlscript");
 		
-		DatabaseInMemory databaseInMemory = new DatabaseInMemory(DATABASE_ID_1);
+		DatabaseInMemory databaseInMemory = new DatabaseInMemory(DEFAULT_DATABASE_ID);
 		Connection conn = databaseInMemory.getCurrentConnection(); 
 		assertNotNull( conn );
 		assertFalse( conn.isClosed() );
@@ -31,7 +31,7 @@ public class DatabaseInMemoryTest extends AbstractTestCase {
 		
 		printSeparator("test1");
 		final int sqlScriptId = 1 ;
-		DatabaseInMemory databaseInMemory = new DatabaseInMemory(DATABASE_ID_1);
+		DatabaseInMemory databaseInMemory = new DatabaseInMemory(DEFAULT_DATABASE_ID);
 		Connection conn = databaseInMemory.getCurrentConnection(); 
 		assertNotNull( conn );
 		assertFalse( conn.isClosed() );
@@ -49,8 +49,8 @@ public class DatabaseInMemoryTest extends AbstractTestCase {
 		printSeparator("test2");
 		final int sqlScriptId = 2 ;
 
-		DatabaseInMemory databaseInMemory = new DatabaseInMemory(DATABASE_ID_1);
-		assertEquals(DATABASE_ID_1, databaseInMemory.getDatabaseId() );
+		DatabaseInMemory databaseInMemory = new DatabaseInMemory(DEFAULT_DATABASE_ID);
+		assertEquals(DEFAULT_DATABASE_ID, databaseInMemory.getDatabaseId() );
 		
 		databaseInMemory.executeSqlInit(sqlScriptId); // CREATE MODEL : VERSION 1
 
@@ -64,7 +64,7 @@ public class DatabaseInMemoryTest extends AbstractTestCase {
 		printSeparator("test5");
 		System.out.println();
 		int scriptId = 5;
-		DatabaseInMemory databaseInMemory = new DatabaseInMemory(DATABASE_ID_1);
+		DatabaseInMemory databaseInMemory = new DatabaseInMemory(DEFAULT_DATABASE_ID);
 		
 		databaseInMemory.executeSqlInit(scriptId);
 		

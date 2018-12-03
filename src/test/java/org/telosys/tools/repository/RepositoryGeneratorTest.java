@@ -34,7 +34,7 @@ public class RepositoryGeneratorTest extends AbstractTestCase {
 
 		RepositoryModel repositoryModel = generateRepositoryModel(1);
 		printModel(repositoryModel);
-		assertTrue(repositoryModel.getDatabaseId() == DATABASE_ID_1 );
+		assertTrue(repositoryModel.getDatabaseId() == DEFAULT_DATABASE_ID );
 		assertEquals(2, repositoryModel.getNumberOfEntities() );
 
 //		EntityInDbModel customerEntity = repositoryModel.getEntityByName("CUSTOMER") ;
@@ -58,7 +58,7 @@ public class RepositoryGeneratorTest extends AbstractTestCase {
 		
 		RepositoryModel repositoryModel = generateRepositoryModel(2);
 		printModel(repositoryModel);
-		assertTrue(repositoryModel.getDatabaseId() == DATABASE_ID_1 );
+		assertTrue(repositoryModel.getDatabaseId() == DEFAULT_DATABASE_ID );
 		assertEquals(2, repositoryModel.getNumberOfEntities() );
 
 //		EntityInDbModel studentEntity = repositoryModel.getEntityByName("STUDENT");
@@ -113,7 +113,7 @@ public class RepositoryGeneratorTest extends AbstractTestCase {
 		
 		RepositoryModel repositoryModel = generateRepositoryModel(3);
 		printModel(repositoryModel);
-		assertTrue(repositoryModel.getDatabaseId() == DATABASE_ID_1 );
+		assertTrue(repositoryModel.getDatabaseId() == DEFAULT_DATABASE_ID );
 		assertEquals(2, repositoryModel.getNumberOfEntities() );
 
 //		EntityInDbModel studentEntity = repositoryModel.getEntityByName("STUDENT");

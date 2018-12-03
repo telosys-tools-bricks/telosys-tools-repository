@@ -27,8 +27,9 @@ import junit.env.telosys.tools.commons.TestsEnv;
 
 public abstract class AbstractTestCase {
 	
-	protected static final String PROJECT_FOLDER = "project2" ;
-	protected static final int    DATABASE_ID_1  = 1 ;
+	private   static final String PROJECT_FOLDER = "project2" ;
+	
+	protected static final int    DEFAULT_DATABASE_ID  = 1 ;
 	
 	protected void printSeparator(String s ) {
 		System.out.println("==================================================================================================");
@@ -74,7 +75,7 @@ public abstract class AbstractTestCase {
 	}
 	
 	/**
-	 * Initialize an database in memory using the given SQL Script ID, <br>
+	 * Initialize a database in memory using the given SQL Script ID, <br>
 	 * then generate the RepositoryModel from this Database
 	 * 
 	 * @param sqlScriptId
@@ -84,7 +85,7 @@ public abstract class AbstractTestCase {
 	protected RepositoryModel generateRepositoryModel(int sqlScriptId) throws TelosysToolsException {
 		
 		System.out.println("Database initialization... ");
-		DatabaseInMemory databaseInMemory = new DatabaseInMemory(DATABASE_ID_1);
+		DatabaseInMemory databaseInMemory = new DatabaseInMemory(DEFAULT_DATABASE_ID);
 		databaseInMemory.executeSqlInit(sqlScriptId);
 		
 		System.out.println("Repository generation... ");
@@ -111,7 +112,7 @@ public abstract class AbstractTestCase {
 	protected UpdateResult generateAndUpdateRepositoryModel(int sqlScriptId) throws TelosysToolsException {
 		
 		System.out.println("Database initialization... ");
-		DatabaseInMemory databaseInMemory = new DatabaseInMemory(DATABASE_ID_1);
+		DatabaseInMemory databaseInMemory = new DatabaseInMemory(DEFAULT_DATABASE_ID);
 		databaseInMemory.executeSqlInit(sqlScriptId);
 		
 

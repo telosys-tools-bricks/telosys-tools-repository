@@ -140,7 +140,7 @@ public class EntityInDbModel implements Serializable, Entity // v 3.0.0 ( 2 spec
 		return databaseComment;
 	}
 	public void setDatabaseComment(String s) {
-		this.databaseComment = s;
+		this.databaseComment = s != null ? s : "" ; // never null 
 	}	
 	
 	//--------------------------------------------------------------------------

@@ -265,7 +265,7 @@ public class DbModelUpdator extends DbModelManager
 		
 		int changesCount = 0 ;
 		
-		LinkedList<String> databaseTables = new LinkedList<String>();
+		LinkedList<String> databaseTables = new LinkedList<>();
 
 		//-----------------------------------------------------------------------
 		// STEP 1 : Update existing tables and Create new ones
@@ -337,25 +337,11 @@ public class DbModelUpdator extends DbModelManager
 		EntityInDbModel entityBefore = ObjectUtil.deepCopy(entity);
 		ChangeOnEntity changeOnEntity = new ChangeOnEntity(ChangeType.UPDATED, entityBefore, entity);
 		//--------------------------------------------------------------------------------
-		// 0) added in ver 2.0.7 
+		// 0) check if table information has changed
 		//--------------------------------------------------------------------------------
 		//--- Set or update TABLE TYPE ( "TABLE", "VIEW", ... )
-		String tableType = dbTable.getTableType() ;
-		if ( tableType != null ) {
-			if ( StrUtil.nullOrVoid(entity.getDatabaseType()) ) {
-				// Not set yet => Set type
-				entity.setDatabaseType(tableType);
-			}
-			else {
-				String originalType = entity.getDatabaseType() ;
-				if ( tableType.equals(originalType) == false ) {
-					// The type has changed => Update type
-					entity.setDatabaseType(tableType);
-					changeOnEntity.setDatabaseTypeHasChanged(true);
-					updateLogger.println(" . Type has changed '" + originalType + "' --> '" + tableType + "'");
-				}
-			}
-		}
+		checkIfTableTypeHasChanged(dbTable, entity, changeOnEntity);
+		checkIfTableCommentHasChanged(dbTable, entity, changeOnEntity);
 		
 		//--------------------------------------------------------------------------------
 		// 1) remove the columns that doesn't exist in the Database 
@@ -396,8 +382,7 @@ public class DbModelUpdator extends DbModelManager
 			
 			//--- Search this column in the REPOSITORY
 			AttributeInDbModel column = entity.getAttributeByColumnName(sColumnName);
-			if ( column != null ) 
-			{
+			if ( column != null ) {
 				//--- The column exists => update it
 				AttributeInDbModel columnBefore = ObjectUtil.deepCopy(column);
 				if ( updateEntityAttribute(column, dbColumn) > 0 ) {
@@ -447,6 +432,51 @@ public class DbModelUpdator extends DbModelManager
 		}
 		//--- Return all the changes for this entity
 		return changeOnEntity ;
+	}
+	
+	/**
+	 * Checks if the table TYPE has changed ( eg type "TABLE" or type "VIEW" )
+	 * @param dbTable
+	 * @param entity
+	 * @param changeOnEntity
+	 */
+	private void checkIfTableTypeHasChanged(DatabaseTable dbTable, EntityInDbModel entity, ChangeOnEntity changeOnEntity ) {
+		String tableType = dbTable.getTableType() ;
+		if ( tableType != null ) {
+			if ( StrUtil.nullOrVoid(entity.getDatabaseType()) ) {
+				// Not set yet => Set type
+				entity.setDatabaseType(tableType);
+			}
+			else {
+				String originalType = entity.getDatabaseType() ;
+				if ( tableType.equals(originalType) == false ) {
+					// The type has changed => Update type
+					entity.setDatabaseType(tableType);
+					changeOnEntity.setDatabaseTypeHasChanged(true);
+					updateLogger.println(" . Type has changed '" + originalType + "' --> '" + tableType + "'");
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Checks if the table COMMENT has changed
+	 * @param dbTable
+	 * @param entity
+	 * @param changeOnEntity
+	 */
+	private void checkIfTableCommentHasChanged(DatabaseTable dbTable, EntityInDbModel entity, ChangeOnEntity changeOnEntity ) {
+		String dbComment = dbTable.getComment(); // Can be null (metadata)
+		if ( dbComment == null ) {
+			dbComment = "" ;
+		}
+		String originalComment = entity.getDatabaseComment() ;
+		if ( ! dbComment.equals(originalComment) ) {
+			// The comment has changed => Update it
+			entity.setDatabaseComment(dbComment);
+			changeOnEntity.setDatabaseCommentHasChanged(true);
+			updateLogger.println(" . Comment has changed '" + originalComment + "' --> '" + dbComment + "'");
+		}
 	}
 	
 	private boolean checkTableExistsInDatabase(String sTableName, LinkedList<String> databaseTables) {
