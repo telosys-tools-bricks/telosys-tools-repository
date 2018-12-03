@@ -1,6 +1,13 @@
 
 DROP ALL OBJECTS;
 
+CREATE TABLE country (
+  code VARCHAR(2) NOT NULL,
+  name VARCHAR(40),
+  PRIMARY KEY(code)
+);
+COMMENT ON TABLE country IS 'My country comment' ;
+
 CREATE TABLE teacher (
   code INTEGER NOT NULL,
   name VARCHAR(40),
@@ -17,6 +24,8 @@ CREATE TABLE student (
   FOREIGN KEY(teacher_code1) REFERENCES teacher(code),
   FOREIGN KEY(teacher_code2) REFERENCES teacher(code)
 );
-
-
 COMMENT ON TABLE student IS 'My student comment' ;
+
+
+
+

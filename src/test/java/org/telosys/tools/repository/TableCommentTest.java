@@ -16,7 +16,7 @@ public class TableCommentTest extends AbstractTestCase {
 		printSeparator("test999001 : Table comment");
 
 		RepositoryModel repositoryModel = generateRepositoryModel(999001);
-		assertEquals(2, repositoryModel.getNumberOfEntities() );
+		assertEquals(3, repositoryModel.getNumberOfEntities() );
 
 		EntityInDbModel teacherEntity = repositoryModel.getEntityByTableName("TEACHER") ;
 		assertNotNull( teacherEntity );
@@ -37,15 +37,23 @@ public class TableCommentTest extends AbstractTestCase {
 
 		UpdateResult updateResult = generateAndUpdateRepositoryModel(999001);
 		
-		RepositoryModel repositoryModel = updateResult.getRepositoryModel();
+
+		ChangeLog changeLog = updateResult.getChangeLog();
+		assertEquals(2, changeLog.getNumberOfEntitiesUpdated()); 
 		
-		assertEquals(2, repositoryModel.getNumberOfEntities() );
+		RepositoryModel repositoryModel = updateResult.getRepositoryModel();
+		assertEquals(3, repositoryModel.getNumberOfEntities() );
+
+		EntityInDbModel countryEntity = repositoryModel.getEntityByTableName("COUNTRY") ;
+		assertNotNull( countryEntity );
+		assertNotNull( countryEntity.getDatabaseComment() );
+		assertEquals("", countryEntity.getDatabaseComment() ); // REMOVED
 
 		EntityInDbModel teacherEntity = repositoryModel.getEntityByTableName("TEACHER") ;
 		assertNotNull( teacherEntity );
 		assertNotNull( teacherEntity.getAttributeByColumnName("CODE") );
 		assertNotNull( teacherEntity.getAttributeByColumnName("NAME") );
-		assertEquals("My teacher comment", teacherEntity.getDatabaseComment() );
+		assertEquals("My teacher comment", teacherEntity.getDatabaseComment() ); // ADDED
 		
 
 		EntityInDbModel studentEntity = repositoryModel.getEntityByTableName("STUDENT") ;
@@ -53,8 +61,6 @@ public class TableCommentTest extends AbstractTestCase {
 		assertNotNull( studentEntity.getDatabaseComment() );
 		assertEquals("My student comment", studentEntity.getDatabaseComment() );
 		
-		ChangeLog changeLog = updateResult.getChangeLog();
-		assertEquals(1, changeLog.getNumberOfEntitiesUpdated());
 	}
 
 }
