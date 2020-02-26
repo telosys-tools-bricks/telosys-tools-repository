@@ -42,13 +42,7 @@ public class AttributeInDbModel implements Comparable<AttributeInDbModel>, Seria
 	
 	private final EntityInDbModel entity ; // v 3.0.0 - The entity owning the attribute
 	
-//	public final static String SPECIAL_DATE_ONLY      = "D";
-//	public final static String SPECIAL_TIME_ONLY      = "T";
-//	public final static String SPECIAL_DATE_AND_TIME  = "DT";
-		 
 	public final static String SPECIAL_LONG_TEXT_TRUE = "true";
-	
-	//private JdbcTypes _jdbcTypes = JdbcTypesManager.getJdbcTypes() ;
 	
 	//----- DATABASE -----
 	
@@ -56,15 +50,12 @@ public class AttributeInDbModel implements Comparable<AttributeInDbModel>, Seria
 
 	private String  _sDatabaseTypeName = null ;  // dbTypeName="INTEGER" - dbTypeName="VARCHAR"
 	
-	private int     _iDatabaseSize     = 0 ;     // dbSize=""
+	private String  databaseSize     = null ;     // dbSize=""
 	
 	private boolean _bDatabaseNotNull  = false ; // dbNotNull="true|false" ( false by default )
 	
-	//private boolean _bPrimaryKey       = false ; // primaryKey="true|false" ( false by default )
 	private boolean _bKeyElement        = false ; // primaryKey="true|false" ( false by default ) // v 3.0.0
 	
-	//private boolean _bForeignKey       = false ; // foreignKey="true|false" ( false by default )
-
 	// An attribute can be involved in many FK, it can be both in a SIMPLE FK and in a COMPOSITE FK 
 	private boolean _bForeignKeySimple     = false ; // ( false by default )
 	private boolean _bForeignKeyComposite  = false ; // ( false by default )
@@ -102,14 +93,11 @@ public class AttributeInDbModel implements Comparable<AttributeInDbModel>, Seria
 	private boolean _bLongText = false ;  //  
 	private boolean _bNotEmpty = false ;  // notEmpty="true|false" 
 	private boolean _bNotBlank = false ;  // notBlank="true|false" 
-//	private String  _sMinLength = null ;
-//	private String  _sMaxLength = null ;
 	private Integer  _iMinLength = null ;
 	private Integer  _iMaxLength = null ;
 	private String  _sPattern   = null ;
 	
 	//----- SPECIAL DATA for DATE & TIME -----
-//	private String  _sDateType = null ; // "D", "T" or "DT" ( see constants )
 	private DateType dateType = null ; // enumeration - ver 3.0.0
 	private boolean _bDatePast   = false ;
 	private boolean _bDateFuture = false ;
@@ -119,8 +107,6 @@ public class AttributeInDbModel implements Comparable<AttributeInDbModel>, Seria
 	private String  _sDateAfterValue  = null ;
 	
 	//----- SPECIAL DATA for NUMERIC -----
-//	private String  _sMinValue = null ;
-//	private String  _sMaxValue = null ;
 	private BigDecimal _iMinValue = null ;
 	private BigDecimal _iMaxValue = null ;
 	
@@ -194,12 +180,6 @@ public class AttributeInDbModel implements Comparable<AttributeInDbModel>, Seria
 
 	//-----------------------------------------------------------------------------
 
-//	public void setPrimaryKey(boolean b) {
-//		_bPrimaryKey = b ;
-//	}
-//	public boolean isPrimaryKey() {
-//		return _bPrimaryKey ;
-//	}
 	public void setKeyElement(boolean b) { // v 3.0.0
 		_bKeyElement = b ;
 	}
@@ -239,12 +219,12 @@ public class AttributeInDbModel implements Comparable<AttributeInDbModel>, Seria
 	}
 
 	//-----------------------------------------------------------------------------
-	public void setDatabaseSize(int size) {
-		_iDatabaseSize = size ;
+	public void setDatabaseSize(String size) {
+		databaseSize = size ;
 	}
 	@Override
-	public Integer getDatabaseSize() {
-		return _iDatabaseSize ;
+	public String getDatabaseSize() {
+		return databaseSize ;
 	}
 
 	//-----------------------------------------------------------------------------
@@ -264,10 +244,6 @@ public class AttributeInDbModel implements Comparable<AttributeInDbModel>, Seria
 	}
 	
 	//-----------------------------------------------------------------------------
-//	/**
-//	 * Returns the database default value 
-//	 * @return
-//	 */
 	@Override
 	public String getDatabaseDefaultValue() { // #LGU 10/08/2011
 		return _sDatabaseDefaultValue;
@@ -283,10 +259,6 @@ public class AttributeInDbModel implements Comparable<AttributeInDbModel>, Seria
 
 	//-----------------------------------------------------------------------------
 
-//	/**
-//	 * Returns the column comment 
-//	 * @return comment
-//	 */
 	@Override
 	public String getDatabaseComment() {
 		return _sDatabaseComment;
@@ -313,14 +285,12 @@ public class AttributeInDbModel implements Comparable<AttributeInDbModel>, Seria
 
 	@Override
 	public String getJdbcTypeName() {
-		//String text = _jdbcTypes.getTextForCode( getJdbcTypeCode() );
 		String text = JdbcTypesManager.getJdbcTypes().getTextForCode( getJdbcTypeCode() );
 		return text != null ? text : "???" ;
 	}
 
 	public String getJdbcTypeCodeWithText() {
 		int code = getJdbcTypeCode();
-		//String text = _jdbcTypes.getTextForCode(code);
 		String text = JdbcTypesManager.getJdbcTypes().getTextForCode( code );
 		if ( text == null ) text = "???" ;
 		return code + " : " + text.toLowerCase() ;
@@ -333,9 +303,6 @@ public class AttributeInDbModel implements Comparable<AttributeInDbModel>, Seria
      * Examples : INTEGER, VARCHAR, NUMBER, CHAR, etc... 
 	 * @return
 	 */
-//	public String getDatabaseTypeName() {
-//		return _sDatabaseTypeName;
-//	}
 	@Override
 	public String getDatabaseType() { // ver 3.0.0
 		return _sDatabaseTypeName;
@@ -347,7 +314,7 @@ public class AttributeInDbModel implements Comparable<AttributeInDbModel>, Seria
 	 * @return
 	 */
 	public String getDatabaseTypeNameWithSize() {
-		return DatabaseUtil.getNativeTypeWithSize(_sDatabaseTypeName, _iDatabaseSize, _iJdbcTypeCode);
+		return DatabaseUtil.getNativeTypeWithSize(_sDatabaseTypeName, databaseSize, _iJdbcTypeCode);
 	}
 
 	public void setDatabaseTypeName(String databaseTypeName) {
@@ -355,13 +322,6 @@ public class AttributeInDbModel implements Comparable<AttributeInDbModel>, Seria
 	}
 
 	//-----------------------------------------------------------------------------
-
-//	public String getJavaName() {
-//		return _sJavaName;
-//	}
-//	public void setJavaName(String s) {
-//		_sJavaName = s ;
-//	}
 
 	@Override
 	public String getName() { // v 3.0.0
@@ -378,34 +338,6 @@ public class AttributeInDbModel implements Comparable<AttributeInDbModel>, Seria
 	}
 	//-----------------------------------------------------------------------------
 	
-//	/**
-//	 * Returns the primitive Java type or the full java class name ( with package )
-//	 * e.g. : "boolean", "java.lang.Boolean", "java.util.Date", etc...
-//	 * @return
-//	 */
-////	public String getJavaType() {
-//	@Override
-//	public String getFullType() { // v 3.0.0
-//		
-//		String sType = _sFullType ;
-//		
-//		//--- Backward compatibility with old repository
-//		
-//		JavaTypes javaTypes = JavaTypesManager.getJavaTypes();
-//		if ( javaTypes.getTypeIndex(sType) < 0 )
-//		{
-//			// Type NOT FOUND : may be a short type ( from an old repository ) 
-//			return javaTypes.getTypeForShortType(sType); 
-//		}
-//		else
-//		{
-//			// Type found => Type OK
-//			return sType ;
-//		}
-//	}
-	
-//	public void setJavaType(String s) {
-//	public void setFullType(String s) { // v 3.0.0
 	/**
 	 * Returns the DB-Model type ( stored as a Java full type )
 	 * @param s
@@ -423,13 +355,6 @@ public class AttributeInDbModel implements Comparable<AttributeInDbModel>, Seria
 	}
 
 	//-----------------------------------------------------------------------------
-//	/**
-//	 * Returns the Java bean default value if any 
-//	 * @return the default value ( "0", "false" ) or null if none
-//	 */
-//	public String getJavaDefaultValue() {
-//		return _sJavaDefaultValue ;
-//	}
 	@Override
 	public String getDefaultValue() { // ver 3.0.0
 		return _sJavaDefaultValue ;
@@ -438,9 +363,6 @@ public class AttributeInDbModel implements Comparable<AttributeInDbModel>, Seria
 	 * Set the default value for the attribute
 	 * @param s the default value ( eg : "0", "false" )
 	 */
-//	public void setJavaDefaultValue(String s) {
-//		_sJavaDefaultValue = s ;
-//	}
 	public void setDefaultValue(String s) {
 		_sJavaDefaultValue = s ;
 	}
@@ -456,9 +378,7 @@ public class AttributeInDbModel implements Comparable<AttributeInDbModel>, Seria
 	 * Returns true is the Java type is "boolean" or "java.lang.Boolean"
 	 * @return
 	 */
-	public boolean isJavaTypeBoolean() 
-	{
-		//return JavaTypeUtil.isCategoryBoolean( getJavaType() ) ;
+	public boolean isJavaTypeBoolean() {
 		return JavaTypeUtil.isCategoryBoolean( _sModelFullType ) ;  // v 3.0.0
 	}
 	
@@ -466,10 +386,7 @@ public class AttributeInDbModel implements Comparable<AttributeInDbModel>, Seria
 	 * Returns true is the Java type is "java.lang.String"
 	 * @return
 	 */
-	public boolean isJavaTypeString() 
-	{
-		//return JavaTypeUtil.isCategoryString( getJavaType() ) ;
-		//return JavaTypeUtil.isCategoryString( getFullType() ) ; // v 3.0.0
+	public boolean isJavaTypeString() {
 		return JavaTypeUtil.isCategoryString( _sModelFullType ) ; // v 3.0.0
 	}
 
@@ -479,10 +396,7 @@ public class AttributeInDbModel implements Comparable<AttributeInDbModel>, Seria
 	 * or respective wrappers, or "BigDecimal", or "BigInteger"<br>
 	 * @return
 	 */
-	public boolean isJavaTypeNumber() 
-	{
-		//return JavaTypeUtil.isCategoryNumber( getJavaType() ) ;
-		//return JavaTypeUtil.isCategoryNumber( getFullType() ) ; // v 3.0.0
+	public boolean isJavaTypeNumber() {
 		return JavaTypeUtil.isCategoryNumber( _sModelFullType ) ; // v 3.0.0
 	}
 	
@@ -491,10 +405,7 @@ public class AttributeInDbModel implements Comparable<AttributeInDbModel>, Seria
 	 * or "java.sql.Time" or "java.sql.Timestamp" <br>
 	 * @return
 	 */
-	public boolean isJavaTypeDateOrTime() 
-	{
-		//return JavaTypeUtil.isCategoryDateOrTime( getJavaType() ) ;
-		//return JavaTypeUtil.isCategoryDateOrTime( getFullType() ) ; // v 3.0.0
+	public boolean isJavaTypeDateOrTime() {
 		return JavaTypeUtil.isCategoryDateOrTime( _sModelFullType ) ; // v 3.0.0
 	}
 	
@@ -502,30 +413,20 @@ public class AttributeInDbModel implements Comparable<AttributeInDbModel>, Seria
 	 * Returns true if the Java type is a "primitive type" ( "int", "boolean", "short", ... )
 	 * @return
 	 */
-	public boolean isJavaPrimitiveType()
-	{
-		//return JavaTypeUtil.isPrimitiveType( getJavaType() );
-		//return JavaTypeUtil.isPrimitiveType( getFullType() ); // v 3.0.0
+	public boolean isJavaPrimitiveType() {
 		return JavaTypeUtil.isPrimitiveType( _sModelFullType ); // v 3.0.0
 	}
 
 	//-----------------------------------------------------------------------------
-//	public boolean getJavaNotNull() {
-//		return _bJavaNotNull;
-//	}
 	@Override
 	public boolean isNotNull() { // v 3.0.0
 		return _bNotNull;
 	}
-//	public void setJavaNotNull(boolean v) {
 	public void setNotNull(boolean v) {  // v 3.0.0
 		_bNotNull = v ;
 	}
 
 	//-----------------------------------------------------------------------------
-//	public boolean getNotEmpty() {
-//		return _bNotEmpty;
-//	}
 	@Override
 	public boolean isNotEmpty() { // v 3.0.0
 		return _bNotEmpty;
@@ -535,24 +436,14 @@ public class AttributeInDbModel implements Comparable<AttributeInDbModel>, Seria
 	}
 
 	//-----------------------------------------------------------------------------
-//	public boolean getNotBlank() {
-//		return _bNotBlank;
-//	}
 	@Override
 	public boolean isNotBlank() { // v 3.0.0
 		return _bNotBlank;
 	}
-
 	public void setNotBlank(boolean v) {
 		_bNotBlank = v ;
 	}
 	//-----------------------------------------------------------------------------
-//	public String getMinLength() {
-//		return _sMinLength;
-//	}
-//	public void setMinLength(String v) {
-//		_sMinLength = v ;
-//	}
 	@Override
 	public Integer getMinLength() { // ver 3.0.0
 		return _iMinLength;
@@ -561,12 +452,6 @@ public class AttributeInDbModel implements Comparable<AttributeInDbModel>, Seria
 		_iMinLength = v ;
 	}
 	//-----------------------------------------------------------------------------
-//	public String getMaxLength() {
-//		return _sMaxLength;
-//	}
-//	public void setMaxLength(String v) {
-//		_sMaxLength = v ;
-//	}
 	@Override
 	public Integer getMaxLength() { // ver 3.0.0
 		return _iMaxLength;
@@ -582,9 +467,6 @@ public class AttributeInDbModel implements Comparable<AttributeInDbModel>, Seria
 		_sPattern = v ;
 	}
 	//-----------------------------------------------------------------------------
-//	public boolean getSelected() {
-//		return _bSelected ;
-//	}
 	@Override
 	public boolean isSelected() { // v 3.0.0
 		return _bSelected ;
@@ -614,9 +496,6 @@ public class AttributeInDbModel implements Comparable<AttributeInDbModel>, Seria
 	}
 	
 	//-----------------------------------------------------------------------------
-//	public boolean getLongText() {
-//		return _bLongText ;
-//	}
 	@Override
 	public boolean isLongText() { // v 3.0.0
 		return _bLongText ;
@@ -629,29 +508,11 @@ public class AttributeInDbModel implements Comparable<AttributeInDbModel>, Seria
 	}
 
 	//-----------------------------------------------------------------------------
-//	/**
-//	 * Returns the special date type : "D", "T", "DT" or "" if none
-//	 * @return
-//	 */
-//	public String getDateType() {
-//		return ( _sDateType != null ? _sDateType : "" ); 
-//	}
 	@Override
 	public DateType getDateType() {
 		return dateType ; 
 	}
 
-	/**
-	 * Set the special date type
-	 * @param v : "D", "T", "DT" or null if none
-	 */
-//	public void setDateType(String v) {
-//		if ( SPECIAL_DATE_ONLY.equals(v) || SPECIAL_TIME_ONLY.equals(v) 
-//				|| SPECIAL_DATE_AND_TIME.equals(v) || null == v )
-//		{
-//			_sDateType = v ;
-//		}
-//	}
 	/**
 	 * Set the date type : DATE ONLY, TIME ONLY, DATE AND TIME
 	 * @param v
@@ -734,30 +595,18 @@ public class AttributeInDbModel implements Comparable<AttributeInDbModel>, Seria
 	
 	//-----------------------------------------------------------------------------
 
-//	public String getMinValue() {
-//		return _sMinValue ; 
-//	}
 	@Override
 	public BigDecimal getMinValue() { // ver 3.0.0
 		return _iMinValue ; 
 	}
-//	public void setMinValue(String v) {
-//		_sMinValue = v ;
-//	}
 	public void setMinValue(BigDecimal v) { // ver 3.0.0
 		_iMinValue = v ;
 	}
 	
-//	public String getMaxValue() {
-//		return _sMaxValue ; 
-//	}
 	@Override
 	public BigDecimal getMaxValue() { // ver 3.0.0
 		return _iMaxValue ; 
 	}
-//	public void setMaxValue(String v) {
-//		_sMaxValue = v ;
-//	}
 	public void setMaxValue(BigDecimal v) { // ver 3.0.0
 		_iMaxValue = v ;
 	}
@@ -768,37 +617,15 @@ public class AttributeInDbModel implements Comparable<AttributeInDbModel>, Seria
 	 * Returns the "special type informations" for this column if any ( else "", never null )
 	 * @return : Special information, ie "Long Text", "Date only", "Time only", boolean true/false value
 	 */
-	public String getSpecialTypeInfo() 
-	{
-//		String sJavaType = getJavaType();
-//		if ( sJavaType != null )
-//		{
-//			if ( "java.lang.String".equals(sJavaType) ) {
-//				if ( getLongText() ) return "Long Text" ;
-//			}
-//			if ( "java.lang.Boolean".equals(sJavaType) || "boolean".equals(sJavaType) ) {
-//				return getBooleanTrueValue() + ":" + getBooleanFalseValue() ;
-//			}
-//			if ( "java.util.Date".equals(sJavaType) ) {
-//				String sDateType = getDateType() ;
-//				if ( SPECIAL_DATE_ONLY.equals(sDateType) )     return "Date only" ;
-//				if ( SPECIAL_TIME_ONLY.equals(sDateType) )     return "Time only" ;
-//				if ( SPECIAL_DATE_AND_TIME.equals(sDateType) ) return "Date + Time" ;
-//			}
-//		}
+	public String getSpecialTypeInfo()  {
 		
 		StringBuffer sb = new StringBuffer();
 		if ( this.isJavaTypeString() ) {
-			//if ( getLongText() ) addStr(sb, "Long Text") ;
 			if ( isLongText() ) addStr(sb, "Long Text") ; // v 3.0.0
-			//if ( getNotEmpty() ) addStr(sb, "NE") ;
 			if ( isNotEmpty() ) addStr(sb, "NE") ; // v 3.0.0
-			//if ( getNotBlank() ) addStr(sb, "NB") ;
 			if ( isNotBlank() ) addStr(sb, "NB") ; // v 3.0.0
-			//if ( ( ! StrUtil.nullOrVoid( getMinLength() ) ) || ( ! StrUtil.nullOrVoid( getMaxLength() ) ) )
 			if ( ( getMinLength() != null ) || ( getMaxLength() != null ) )
 			{
-				//addStr( sb, "[" + str(getMinLength()) + ";" + str(getMaxLength()) + "]" );
 				addStr( sb, "[" + getMinLength() + ";" + getMaxLength() + "]" );
 			}
 			if ( ! StrUtil.nullOrVoid( getPattern() ) ) addStr(sb, "P" ) ;
@@ -813,18 +640,12 @@ public class AttributeInDbModel implements Comparable<AttributeInDbModel>, Seria
 			{
 				addStr( sb, getDefaultValue() );
 			}
-			//if ( ( ! StrUtil.nullOrVoid( getMinValue() ) ) || ( ! StrUtil.nullOrVoid( getMaxValue() ) ) )
 			if ( ( getMinValue() != null ) || ( getMaxValue() != null ) )
 			{
-				//addStr( sb, "[" + str(getMinValue()) + ";" + str(getMaxValue()) + "]" );
 				addStr( sb, "[" + getMinValue() + ";" + getMaxValue() + "]" );
 			}
 		}
 		else if ( this.isJavaTypeDateOrTime() ) {
-			//String sDateType = getDateType() ;
-			//if ( SPECIAL_DATE_ONLY.equals(sDateType) )     addStr( sb, "Date only" );
-			//if ( SPECIAL_TIME_ONLY.equals(sDateType) )     addStr( sb, "Time only" );
-			//if ( SPECIAL_DATE_AND_TIME.equals(sDateType) ) addStr( sb, "Date & Time" );
 			DateType dateType = getDateType();
 			if ( dateType == DateType.DATE_ONLY )     addStr( sb, "Date only" );
 			if ( dateType == DateType.TIME_ONLY )     addStr( sb, "Time only" );
@@ -837,10 +658,6 @@ public class AttributeInDbModel implements Comparable<AttributeInDbModel>, Seria
 		}
 		return sb.toString();
 	}
-//	private String str(String s)
-//	{
-//		return s != null ? s : "" ;
-//	}
 	private void addStr(StringBuffer sb, String s)
 	{
 		if ( sb.length() > 0 ) sb.append(",");
@@ -852,7 +669,6 @@ public class AttributeInDbModel implements Comparable<AttributeInDbModel>, Seria
 	 */
 	public void clearSpecialTypeInfo() 
 	{
-		//setJavaNotNull(false);
 		setNotNull(false); // v 3.0.0
 		//--- Boolean category 
 		setBooleanTrueValue(null);
@@ -877,11 +693,9 @@ public class AttributeInDbModel implements Comparable<AttributeInDbModel>, Seria
 		setPattern(null);
 	}
 	
-	//public int compareTo(Object o) {
 	public int compareTo(AttributeInDbModel other) {
 		if ( other != null )
 		{
-			//Column other = (Column) o;
 			return ( this.getDatabasePosition() - other.getDatabasePosition() );
 		}
 		return 0;
@@ -897,13 +711,8 @@ public class AttributeInDbModel implements Comparable<AttributeInDbModel>, Seria
 		return 
 			getName() + "|" // added in v 3.0.0
 			+ "table:" + getDatabaseName() + "|" 
-			//+ ( isPrimaryKey() ? "PK" : "" ) + "|" 
 			+ ( isKeyElement() ? "PK" : "" ) + "|" // v 3.0.0
-			// + getDatabaseType() + "|" 
 			+ getJdbcTypeCode() + "|" 
-			//+ getJavaName() + "|" 
-			//+ getName() + "|" // v 3.0.0 
-			// + getJavaType() ;
 			+ getNeutralType() ; // v 3.0.0
 	}
 
@@ -1053,15 +862,6 @@ public class AttributeInDbModel implements Comparable<AttributeInDbModel>, Seria
 	}
 
 	//-----------------------------------------------------------------------------
-//--- Remove, replaced by isFK()
-//	public void setForeignKey(boolean b) {
-//		_bForeignKey = b ;
-//	}
-//	@Override
-//	public boolean isUsedInForeignKey() { // v 3.0.0
-//		return _bForeignKey;
-//	}
-	
 	
 	@Override
 	public boolean isFK() {

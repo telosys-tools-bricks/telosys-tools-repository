@@ -143,10 +143,13 @@ public class DbModelUpdator extends DbModelManager
 
 	private int updateSize( AttributeInDbModel column, int iSize) {
 		int r = 0;
-		if ( column.getDatabaseSize() != iSize ) 
+		String fullSize = "" + iSize ;
+//		if ( column.getDatabaseSize() != iSize ) 
+		if ( ! fullSize.equals(column.getDatabaseSize()) ) 
 		{
 			updateLogger.println(" . Column '" + column.getDatabaseName() + "' : Size changed to " + iSize);
-			column.setDatabaseSize(iSize);
+//			column.setDatabaseSize(iSize);
+			column.setDatabaseSize(fullSize);
 			r++;
 		}
 		return r;

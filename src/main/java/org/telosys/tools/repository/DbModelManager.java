@@ -196,7 +196,11 @@ public abstract class DbModelManager
 	protected AttributeInDbModel buildColumn(EntityInDbModel entity, DatabaseColumn dbCol ) {	
 		String dbColName     = dbCol.getColumnName(); //--- Column Name
 		String dbTypeName    = dbCol.getDbTypeName(); //--- Column Type (original database type)
-		int    iDbSize       = dbCol.getSize(); //--- Column Size (max nb of characters or decimal precision 
+
+		//int    iDbSize       = dbCol.getSize(); //--- Column Size (max nb of characters or decimal precision 
+		String dbSize = "" + dbCol.getSize();
+		int    maxLen = dbCol.getSize(); 
+		
 		int    iJdbcTypeCode = dbCol.getJdbcTypeCode(); //--- Column JDBC Type (cf "java.sql.Types" )
 		String dbNotNull     = dbCol.getNotNullAsString(); //--- Column NOT NULL ( "true" or "false" )
 		
@@ -204,7 +208,6 @@ public abstract class DbModelManager
 		String sAttributeName = "???";
 		String sAttributeType = "???";
 		boolean bAttributeLongText = false ;
-		//String sAttributeDateType = null;
 		
 		try {
 			sAttributeType = repositoryRules.getAttributeType(dbTypeName, iJdbcTypeCode, dbCol.isNotNull() );
@@ -220,9 +223,6 @@ public abstract class DbModelManager
 			//--- Attribute LONG TEXT ? ( BLOB, CLOB, etc )
 			bAttributeLongText = isAttributeLongText ( dbTypeName, iJdbcTypeCode );
 			
-//			//--- Attribute DATE TYPE ( Date Only, Time Only, Date and Type )
-//			sAttributeDateType = getAttributeDateType(dbTypeName, iJdbcTypeCode);
-
 		} catch (Throwable t) {
 			logger.log("   ERROR : " + t.toString() + " - " + t.getMessage());
 		}
@@ -230,57 +230,55 @@ public abstract class DbModelManager
 				+ sAttributeName + " ( " + sAttributeType + " ) ");
 
 		//--- Create a new "column" for this "table/entity"
-		AttributeInDbModel column = new AttributeInDbModel(entity);
-		column.setDatabaseName(dbColName);
-		column.setDatabaseTypeName(dbTypeName);
-		column.setJdbcTypeCode(iJdbcTypeCode);
-		column.setDatabaseNotNull(dbNotNull);
-		column.setDatabaseSize(iDbSize);
-		column.setName(sAttributeName); // v 3.0.0
-		column.setModelFullType(sAttributeType); // v 3.0.0
+		AttributeInDbModel attributeInDbModel = new AttributeInDbModel(entity);
+		attributeInDbModel.setDatabaseName(dbColName);
+		attributeInDbModel.setDatabaseTypeName(dbTypeName);
+		attributeInDbModel.setJdbcTypeCode(iJdbcTypeCode);
+		attributeInDbModel.setDatabaseNotNull(dbNotNull);
+//		attributeInDbModel.setDatabaseSize(iDbSize);
+		attributeInDbModel.setDatabaseSize(dbSize);
+		
+		attributeInDbModel.setName(sAttributeName); // v 3.0.0
+		attributeInDbModel.setModelFullType(sAttributeType); // v 3.0.0
 		
 		//--- Java default value for primitive types
 		JavaTypes javaTypes = JavaTypesManager.getJavaTypes();
 		String sDefaultValue = javaTypes.getDefaultValueForType(sAttributeType);
 		if ( sDefaultValue != null ) {
 			// Not null only for primitive types
-			column.setDefaultValue(sDefaultValue);
+			attributeInDbModel.setDefaultValue(sDefaultValue);
 		}
 		
-		if ( bAttributeLongText == true ) {
-			column.setLongText( AttributeInDbModel.SPECIAL_LONG_TEXT_TRUE );
+		if ( bAttributeLongText ) {
+			attributeInDbModel.setLongText( AttributeInDbModel.SPECIAL_LONG_TEXT_TRUE );
 		}
 		
-		column.setDateType(getAttributeDateType(iJdbcTypeCode)); // V 3.0.0
+		attributeInDbModel.setDateType(getAttributeDateType(iJdbcTypeCode)); // V 3.0.0
 
 		//--- Is this column in the Table Primary Key ?
-		column.setKeyElement( dbCol.isInPrimaryKey()); // v 3.0.0
-
-		//--- Is this column a member of a Foreign Key ?
-		// Removed in v 3.0.0 - now FK Type (Simple/Composite) is set later, after FK building  
-		// column.setForeignKey( dbCol.getUsedInForeignKey() > 0 );
+		attributeInDbModel.setKeyElement( dbCol.isInPrimaryKey()); // v 3.0.0
 
 		//--- Is this column auto-incremented ?
-		column.setAutoIncremented(dbCol.isAutoIncremented());
-		column.setDatabasePosition( dbCol.getOrdinalPosition() ); // #LGU 10/08/2011
-		column.setDatabaseDefaultValue( dbCol.getDefaultValue() ); // #LGU 10/08/2011
-		column.setDatabaseComment( dbCol.getComment() ); // v 2.1.1 - #LCH 20/08/2014
+		attributeInDbModel.setAutoIncremented(dbCol.isAutoIncremented());
+		attributeInDbModel.setDatabasePosition( dbCol.getOrdinalPosition() ); // #LGU 10/08/2011
+		attributeInDbModel.setDatabaseDefaultValue( dbCol.getDefaultValue() ); // #LGU 10/08/2011
+		attributeInDbModel.setDatabaseComment( dbCol.getComment() ); // v 2.1.1 - #LCH 20/08/2014
 
 		//--- Further information ( v 2.0.3 )
-		column.setLabel(     repositoryRules.getAttributeGuiLabel(dbColName) );
-		column.setInputType( repositoryRules.getAttributeGuiType(dbColName, iJdbcTypeCode));
+		attributeInDbModel.setLabel(     repositoryRules.getAttributeGuiLabel(dbColName) );
+		attributeInDbModel.setInputType( repositoryRules.getAttributeGuiType(dbColName, iJdbcTypeCode));
 		
 		//--- Further information for Java Validator 
-		if ( ! column.isJavaPrimitiveType() ) {
+		if ( ! attributeInDbModel.isJavaPrimitiveType() ) {
 			if ( dbCol.isNotNull()  ) {
-				column.setNotNull(true); // v 3.0.0
-				column.setNotEmpty(true);
+				attributeInDbModel.setNotNull(true); // v 3.0.0
+				attributeInDbModel.setNotEmpty(true);
 			}
-			if ( column.isJavaTypeString() ) {
-				column.setMaxLength(iDbSize); // v 3.0.0
+			if ( attributeInDbModel.isJavaTypeString() ) {
+				attributeInDbModel.setMaxLength(maxLen); // v 3.0.0
 			}
 		}
-		return column ;
+		return attributeInDbModel ;
 	}
 	
 	protected ForeignKeyInDbModel buildForeignKey( DatabaseForeignKey dbFK ) 
@@ -297,7 +295,6 @@ public abstract class DbModelManager
 			foreignKeyColumn.setColumnName(dbFkCol.getFkColumnName() );
 			
 			foreignKeyColumn.setTableRef( dbFkCol.getPkTableName() );
-//			foreignKeyColumn.setColumnRef( dbFkCol.getPkColumnName() );
 			foreignKeyColumn.setReferencedColumnName( dbFkCol.getPkColumnName() ); // v 3.0.0
 			
 			foreignKeyColumn.setUpdateRuleCode( dbFkCol.getUpdateRule() );
