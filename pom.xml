@@ -12,28 +12,25 @@
 
 	<name>telosys-tools-repository</name>
 	<artifactId>telosys-tools-repository</artifactId>
-	<version>${telosys-tools-repository.version}</version>
+	<version>3.0.3</version> <!-- also update version in DbModelVersion.java  -->
 	<packaging>jar</packaging>
 
 	<dependencies>
 	
 		<!-- TELOSYS-TOOLS SUBPROJECTS DEPENDENCIES -->	
 		<dependency>
-			<groupId>${project.parent.groupId}</groupId>
+			<groupId>org.telosys</groupId>
 			<artifactId>telosys-tools-commons</artifactId>
-			<version>${telosys-tools-commons.version}</version>
 		</dependency>
 		
 	 	<dependency>
-			<groupId>${project.parent.groupId}</groupId>
+			<groupId>org.telosys</groupId>
 		  	<artifactId>telosys-tools-database</artifactId>
-			<version>${telosys-tools-database.version}</version>
 	 	</dependency>
 	 	
 	 	<dependency>
-			<groupId>${project.parent.groupId}</groupId>
+			<groupId>org.telosys</groupId>
 		  	<artifactId>telosys-tools-generic-model</artifactId>
-			<version>${telosys-tools-generic-model.version}</version>
 	 	</dependency>
 	 	
 	 	<!-- FOR TESTS  -->
