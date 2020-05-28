@@ -18,6 +18,7 @@ package org.telosys.tools.repository.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 import org.telosys.tools.commons.DatabaseUtil;
 import org.telosys.tools.commons.JavaTypeUtil;
@@ -926,6 +927,18 @@ public class AttributeInDbModel implements Comparable<AttributeInDbModel>, Seria
 	public boolean isUsedInSelectedLinks() {
 		// Is it used in one of the selected links ?
 		return isUsedInLink( this.entity.getSelectedLinks() );
+	}
+
+	//-----------------------------------------------------------------------------------------
+	// ATTRIBUTE TAGS (added in v 3.3.0) : NO TAGS IN DB-MODEL 
+	//-----------------------------------------------------------------------------------------	
+	@Override
+	public String getTagValue(String tagName) {
+		return "";
+	}
+	@Override
+	public boolean hasTag(String tagName) {
+		return false;
 	}
 
 }
