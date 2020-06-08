@@ -933,12 +933,7 @@ public class AttributeInDbModel implements Comparable<AttributeInDbModel>, Seria
 	// ATTRIBUTE TAGS (added in v 3.3.0) : NO TAGS IN DB-MODEL 
 	//-----------------------------------------------------------------------------------------	
 	@Override
-	public String getTagValue(String tagName) {
-		return "";
+	public Map<String, String> getTagsMap() {
+		return null;
 	}
-	@Override
-	public boolean hasTag(String tagName) {
-		return false;
-	}
-
 }
