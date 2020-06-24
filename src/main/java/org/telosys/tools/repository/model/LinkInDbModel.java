@@ -48,18 +48,14 @@ public class LinkInDbModel implements Serializable, Link
 	 * Relationship's cardinality
 	 * "OneToOne", "OneToMany", "ManyToOne", "ManyToMany"
 	 */
-//	private String  cardinality;
 	private Cardinality  cardinality = Cardinality.UNDEFINED ; // v 3.0.0
 
-//	private String javaFieldName; // name of the java field holding the link 
 	private String fieldName; // name of the java field holding the link // v 3.0.0
 	
-//	private String javaFieldType; // type of the java field holding the link
-	private String fieldType; // type of the java field holding the link // v 3.0.0
+	// private String fieldType; // type of the java field holding the link // REMOVED in v 3.3.0
 
 	private boolean owningSide = true; // porteur de la relation ou non --- pas besoin si "non-owning OneToMany entity side must used the mappedBy element to specify the relationship field"
 
-//	private String inverseSideOf; // identifie le link id porteur de la relation
 	private String inverseSideLinkId ; // v 3.0.0
 	
 	private String mappedBy;  // inverse side, mapped by define property
@@ -68,36 +64,25 @@ public class LinkInDbModel implements Serializable, Link
 	 * The operations that must be cascaded to the target of the association. By default no operations are cascaded : 
 	 * ALL,MERGE,PERSIT,REFRESH,REMOVE
 	 */
-	// The operations that must be cascaded to the target of the association. 
-	// By default no operations are cascaded.
-//	private boolean cascadeALL     = false;
-//	private boolean cascadeMERGE   = false;
-//	private boolean cascadePERSIST = false;
-//	private boolean cascadeREFRESH = false;
-//	private boolean cascadeREMOVE  = false;
 	private CascadeOptions cascadeOptions = null ;
 	
 	/**
 	 * Fetch strategy
 	 * DEFAULT|EAGER|LAZY
 	 */
-//	private String fetch = RepositoryConst.FETCH_DEFAULT ;
 	private FetchType fetchType = FetchType.UNDEFINED ;
 	
 	/**
 	 * Whether the association is optional. If set to false then a non-null relationship must always exist. Default to true
 	 */
-//	private String  optional = RepositoryConst.OPTIONAL_UNDEFINED ;
 	private Optional optional = Optional.UNDEFINED ; // v 3.0.0
 	
-//	private String   targetEntityJavaType ;
 	private String   targetEntityClassName ; // v 3.0.0
 	
 	private String   foreignKeyName = null ;
 	private String   joinTableName  = null ;
 	
 	//--- ManyToOne or OneToOne link based on "Join Columns"
-//	private JoinColumnsInDbModel  joinColums = null ;
 	private List<JoinColumnInDbModel>   joinColumns = null ;
 
 	//--- ManyToMany link based on "Join Table"
@@ -125,42 +110,25 @@ public class LinkInDbModel implements Serializable, Link
 	public final static String buildId(EntityInDbModel joinTable, boolean owningSide) 
 	{
 		String tableId = "" ;
-//		if ( StrUtil.nullOrVoid( joinTable.getSchema() ) ) {
 		if ( StrUtil.nullOrVoid( joinTable.getDatabaseSchema() ) ) {
-//			tableId = joinTable.getName() ;
 			tableId = joinTable.getDatabaseTable() ;
 		}
 		else {
-//			tableId = joinTable.getSchema() + "." + joinTable.getName() ;
 			tableId = joinTable.getDatabaseSchema() + "." + joinTable.getDatabaseTable() ;
 		}
 		return "LINK_JT_" + tableId + "_" + ( owningSide ? "O" : "I" ) ;
 	}
 	
-
-//	//--------------------------------------------------------------------------
-//	public String getCheckSum() {
-//		return this.getSourceTableName() + "#" +  this.getTargetTableName();
-//	}
-//
-	
 	//--------------------------------------------------------------------------
-//	public void setJoinColumns( JoinColumnsInDbModel joinColumns ) {
-//		joinColums = joinColumns ;
-//	}
 	public void setJoinColumns( List<JoinColumnInDbModel> joinColumns ) {
 		this.joinColumns = joinColumns ;
 	}
-//	public JoinColumnsInDbModel getJoinColumns() {
-//		return joinColums ;
-//	}
 	@Override
 	public List<JoinColumn> getJoinColumns() {
 		return DbModelUtil.toListOfJoinColumns(this.joinColumns) ;
 	}
 	
 	//--------------------------------------------------------------------------
-//	public JoinTableInDbModel getJoinTable()
 	@Override
 	public JoinTable getJoinTable()	{
 		return joinTable ;
@@ -174,24 +142,16 @@ public class LinkInDbModel implements Serializable, Link
 	public String getId() {
 		return id;
 	}
-
 	public void setId(String id) {
 		this.id = id;
 	}
 
 	//--------------------------------------------------------------------------
-//	public boolean isUsed() {
-//		return used;
-//	}
-//
-//	public void setUsed(boolean used) {
-//		this.used = used;
-//	}
 	@Override
-	public boolean isSelected() { // replaces isUsed()
+	public boolean isSelected() {
 		return used; 
 	}
-	public void setSelected(boolean selected) { // replaces setUsed(boolean used)
+	public void setSelected(boolean selected) {
 		this.used = selected;
 	}
 
@@ -210,7 +170,6 @@ public class LinkInDbModel implements Serializable, Link
 	public String getTargetTableName() {
 		return targetTableName;
 	}
-
 	public void setTargetTableName(String targetTableName) {
 		this.targetTableName = targetTableName;
 	}
@@ -218,27 +177,11 @@ public class LinkInDbModel implements Serializable, Link
 	//--------------------------------------------------------------------------
 	// Field Name
 	//--------------------------------------------------------------------------
-//	/**
-//	 * Returns the name of the Java field holding the link  <br>
-//	 * ie : "book", "customer", "books", "customers", ...
-//	 * @return
-//	 */
-//	public String getJavaFieldName() {
-//		return javaFieldName;
-//	}
 	@Override
 	public String getFieldName() {
 		return this.fieldName;
 	}
 
-//	/**
-//	 * Set the name of the Java field holding the link   <br>
-//	 * ie : "book", "customer", "books", "listOfCustomers", ...
-//	 * @param javaName
-//	 */
-//	public void setJavaFieldName(String javaName) {
-//		this.javaFieldName = javaName;
-//	}
 	/**
 	 * Set the name of the Java field holding the link   <br>
 	 * ie : "book", "customer", "books", "listOfCustomers", ...
@@ -251,46 +194,25 @@ public class LinkInDbModel implements Serializable, Link
 	//--------------------------------------------------------------------------
 	// Field Type
 	//--------------------------------------------------------------------------
-//	/**
-//	 * Returns the Java type of the link reference <br>
-//	 * ie : "Book", "Customer", or collection type ( "java.util.List", ... )
-//	 * @return
-//	 */
-//	public String getJavaFieldType() {
-//		if ( ! StrUtil.nullOrVoid(javaFieldType) ) {
-//			return javaFieldType; // Specific type : ie "java.util.List"
+//  REMOVED in v 3.3.0
+//	@Override
+//	public String getFieldType() { // v 3.0.0
+//		if ( ! StrUtil.nullOrVoid(this.fieldType) ) {
+//			return this.fieldType; // Specific type : ie "java.util.List"
 //		}
 //		else {
-//			return getTargetEntityJavaType() ; // "Book", "Customer", ...
+//			return getTargetEntityClassName(); // "Book", "Customer", ...
 //		}
 //	}
-
-	@Override
-	public String getFieldType() { // v 3.0.0
-		if ( ! StrUtil.nullOrVoid(this.fieldType) ) {
-			return this.fieldType; // Specific type : ie "java.util.List"
-		}
-		else {
-			return getTargetEntityClassName(); // "Book", "Customer", ...
-		}
-	}
-
+//
 //	/**
-//	 * Set the type of the Java field holding the link   <br>
+//	 * Set the type of the field holding the link   <br>
 //	 * ie : "Book", "Customer", or collection type ( "java.util.List", ... )
-//	 * @param javaType
+//	 * @param fieldType
 //	 */
-//	public void setJavaFieldType(String javaType) {
-//		this.javaFieldType = javaType;
+//	public void setFieldType(String fieldType) { // v 3.0.0
+//		this.fieldType = fieldType;
 //	}
-	/**
-	 * Set the type of the field holding the link   <br>
-	 * ie : "Book", "Customer", or collection type ( "java.util.List", ... )
-	 * @param fieldType
-	 */
-	public void setFieldType(String fieldType) { // v 3.0.0
-		this.fieldType = fieldType;
-	}
 
 	//--------------------------------------------------------------------------
 	@Override
@@ -308,23 +230,11 @@ public class LinkInDbModel implements Serializable, Link
 	}
 	
 	//--------------------------------------------------------------------------
-//	/**
-//	 * Returns the link id of the inverse side 
-//	 */
-//	public String getInverseSideOf() {
-//		return inverseSideOf;
-//	}
 	@Override
 	public String getInverseSideLinkId() { // v 3.0.0
 		return inverseSideLinkId;
 	}
 	
-//	/**
-//	 * Set the link id of the inverse side
-//	 */
-//	public void setInverseSideOf(String inverseSideOf) {
-//		this.inverseSideOf = inverseSideOf;
-//	}
 	/**
 	 * Set the link id of the inverse side
 	 * @param inverseSideLinkId
@@ -344,19 +254,6 @@ public class LinkInDbModel implements Serializable, Link
 	}
 
 	//--------------------------------------------------------------------------
-//	public void setOptional(String v) {
-//		this.optional = RepositoryConst.OPTIONAL_UNDEFINED;
-//		if (v != null) {
-//			if (RepositoryConst.OPTIONAL_TRUE.equalsIgnoreCase(v)) 
-//			{
-//				this.optional = RepositoryConst.OPTIONAL_TRUE;
-//			} 
-//			else if (RepositoryConst.OPTIONAL_FALSE.equalsIgnoreCase(v)) 
-//			{
-//				this.optional = RepositoryConst.OPTIONAL_FALSE;
-//			}
-//		}
-//	}
 	/**
 	 * Set the 'Optional' property ( TRUE, FALSE, UNDEFINED )
 	 * @param v
@@ -374,35 +271,17 @@ public class LinkInDbModel implements Serializable, Link
 	 * Returns the 'optional' property : "TRUE"/"FALSE"/"UNDEFINED" (never null)
 	 * @return
 	 */
-//	public String getOptional() {
-//		return this.optional ;
-//	}
 	@Override
 	public Optional getOptional() { // v 3.0.0
 		return this.optional ;
 	}
 	
-//	public boolean isOptionalTrue() {
-//		return ( RepositoryConst.OPTIONAL_TRUE.equals( this.optional ) ) ;
-//	}
-//	public boolean isOptionalFalse() {
-//		return ( RepositoryConst.OPTIONAL_FALSE.equals( this.optional ) ) ;
-//	}
-//	public boolean isOptionalUndefined() {
-//		if ( isOptionalTrue() || isOptionalFalse() ) return false ;
-//		return true ;
-//	}
-	
-
 	//--------------------------------------------------------------------------
 	/**
 	 * Returns the short Class Name of the TARGET ENTITY  <br>
 	 * ie "Book", "Customer", ... 
 	 * @return
 	 */
-//	public String getTargetEntityJavaType() {
-//		return targetEntityJavaType;
-//	}
 	@Override
 	public String getTargetEntityClassName() { // v 3.0.0
 		return this.targetEntityClassName ;
@@ -412,9 +291,6 @@ public class LinkInDbModel implements Serializable, Link
 	 * Set the short Class Name of the TARGET ENTITY  <br>
 	 * @param v the short Java type ( ie "Book", "Customer", ... )
 	 */
-//	public void setTargetEntityJavaType(String v) {
-//		this.targetEntityJavaType = v;
-//	}
 	public void setTargetEntityClassName(String v) { // v 3.0.0
 		this.targetEntityClassName = v;
 	}
@@ -426,31 +302,11 @@ public class LinkInDbModel implements Serializable, Link
 	 * Returns the link type  : "OneToMany", "ManyToOne", "OneToOne", "ManyToMany" 
 	 * @return
 	 */
-//	public String getCardinality() {
-//		return cardinality;
-//	}
 	@Override
 	public Cardinality getCardinality() {  // v 3.0.0
 		return this.cardinality;
 	}
 
-//	public void setCardinality(String p_type) {
-//		if (p_type != null) {
-//			if (RepositoryConst.MAPPING_ONE_TO_ONE.equalsIgnoreCase(p_type)) {
-//				this.cardinality = RepositoryConst.MAPPING_ONE_TO_ONE;
-//			} else if (RepositoryConst.MAPPING_ONE_TO_MANY.equalsIgnoreCase(p_type)) {
-//				this.cardinality = RepositoryConst.MAPPING_ONE_TO_MANY;
-//			} else if (RepositoryConst.MAPPING_MANY_TO_ONE.equalsIgnoreCase(p_type)) {
-//				this.cardinality = RepositoryConst.MAPPING_MANY_TO_ONE;
-//			} else if (RepositoryConst.MAPPING_MANY_TO_MANY.equalsIgnoreCase(p_type)) {
-//				this.cardinality = RepositoryConst.MAPPING_MANY_TO_MANY;
-//			} else {
-//				this.cardinality = RepositoryConst.MAPPING_UNKNOWN;
-//			}
-//		} else {
-//			this.cardinality = RepositoryConst.MAPPING_UNKNOWN;
-//		}
-//	}
 	/**
 	 * Set the cardinality
 	 * @param v the cardinality to be set, a 'null' value is transformed into 'UNDEFINED'
@@ -464,22 +320,6 @@ public class LinkInDbModel implements Serializable, Link
 		}
 	}
 		
-//	public boolean isTypeOneToOne() {
-//		return RepositoryConst.MAPPING_ONE_TO_ONE.equals(cardinality);
-//	}
-//
-//	public boolean isTypeOneToMany() {
-//		return RepositoryConst.MAPPING_ONE_TO_MANY.equals(cardinality);
-//	}
-//
-//	public boolean isTypeManyToOne() {
-//		return RepositoryConst.MAPPING_MANY_TO_ONE.equals(cardinality);
-//	}
-//
-//	public boolean isTypeManyToMany() {
-//		return RepositoryConst.MAPPING_MANY_TO_MANY.equals(cardinality);
-//	}
-
 	public boolean isCardinalityOneToOne() {
 		return cardinality != null ? cardinality == Cardinality.ONE_TO_ONE : false ;
 	}
@@ -499,64 +339,10 @@ public class LinkInDbModel implements Serializable, Link
 	//--------------------------------------------------------------------------
 	// CASCADE
 	//--------------------------------------------------------------------------
-//	public String getCascade() {
-//		if ( this.cascadeALL ) {
-//			return RepositoryConst.CASCADE_ALL ;
-//		}
-//		else {
-//			StringBuffer sb = new StringBuffer();
-//			if ( this.cascadeMERGE ) {
-//				sb.append(" ");
-//				sb.append(RepositoryConst.CASCADE_MERGE);
-//			}
-//			if ( this.cascadePERSIST ) {
-//				sb.append(" ");
-//				sb.append(RepositoryConst.CASCADE_PERSIST);
-//			}
-//			if ( this.cascadeREFRESH ) {
-//				sb.append(" ");
-//				sb.append(RepositoryConst.CASCADE_REFRESH);
-//			}
-//			if ( this.cascadeREMOVE ) {
-//				sb.append(" ");
-//				sb.append(RepositoryConst.CASCADE_REMOVE);
-//			}
-//			return sb.toString();
-//		}
-//	}
-	
 	@Override
 	public CascadeOptions getCascadeOptions() {
 		return this.cascadeOptions;
 	}
-
-//	public void setCascade(String cascade) {
-//		// Traitement normatif, NON exclusif (cumul possible) et NON obligatoire de la strategie de cascade
-//		this.cascadeALL     = false;
-//		this.cascadeMERGE   = false;
-//		this.cascadePERSIST = false;
-//		this.cascadeREFRESH = false;
-//		this.cascadeREMOVE  = false;
-//		
-//		if ( cascade != null ) {
-//			String cascadeUC = cascade.toUpperCase();
-//			if (cascadeUC.contains(RepositoryConst.CASCADE_ALL)) {
-//				this.cascadeALL = true;
-//			}
-//			if (cascadeUC.contains(RepositoryConst.CASCADE_MERGE)) {
-//				this.cascadeMERGE = true;
-//			}
-//			if (cascadeUC.contains(RepositoryConst.CASCADE_PERSIST)) {
-//				this.cascadePERSIST = true;
-//			}
-//			if (cascadeUC.contains(RepositoryConst.CASCADE_REFRESH)) {
-//				this.cascadeREFRESH = true;
-//			}
-//			if (cascadeUC.contains(RepositoryConst.CASCADE_REMOVE)) {
-//				this.cascadeREMOVE = true;
-//			}
-//		}
-//	}
 
 	/**
 	 * Set the 'cascade options' ( ALL, MERGE, PERSIST, etc )
@@ -571,78 +357,15 @@ public class LinkInDbModel implements Serializable, Link
 		}
 	}
 
-//	public boolean isCascadeALL() {
-//		return cascadeALL;
-//	}
-//	public void setCascadeALL(boolean v) {
-//		cascadeALL = v ;
-//	}
-//
-//	public boolean isCascadeMERGE() {
-//		return cascadeMERGE;
-//	}
-//	public void setCascadeMERGE(boolean v) {
-//		cascadeMERGE = v ;
-//	}
-//
-//	public boolean isCascadePERSIST() {
-//		return cascadePERSIST;
-//	}
-//	public void setCascadePERSIST(boolean v) {
-//		cascadePERSIST = v ;
-//	}
-//
-//	public boolean isCascadeREFRESH() {
-//		return cascadeREFRESH;
-//	}
-//	public void setCascadeREFRESH(boolean v) {
-//		cascadeREFRESH = v;
-//	}
-//
-//	public boolean isCascadeREMOVE() {
-//		return cascadeREMOVE;
-//	}
-//	public void setCascadeREMOVE(boolean v) {
-//		cascadeREMOVE = v;
-//	}
-
 	/**
 	 * Returns "fetch" property (DEFAULT, EAGER, LAZY, UNDEFINED)
 	 * @return
 	 */
-//	public String getFetch() {
-//		return fetch;
-//	}
 	@Override
 	public FetchType getFetchType() { // v 3.0.0
 		return this.fetchType;
 	}
 	
-
-//	/**
-//	 * @param p_fetch
-//	 */
-//	public void setFetch(String p_fetch) {
-//		// Traitement normatif, exclusif (cumul possible) et NON obligatoire de la strategie du Fetch
-////		this.fetchDEFAULT = false;
-////		this.fetchEAGER = false;
-////		this.fetchLAZY = false;
-//		if (p_fetch != null) {
-//			if (RepositoryConst.FETCH_EAGER.equalsIgnoreCase(p_fetch)) {
-//				this.fetch = RepositoryConst.FETCH_EAGER;
-//				//this.fetchEAGER = true;
-//			} else if (RepositoryConst.FETCH_LAZY.equalsIgnoreCase(p_fetch)) {
-//				this.fetch = RepositoryConst.FETCH_LAZY;
-//				//this.fetchLAZY = true;
-//			} else {
-//				this.fetch = RepositoryConst.FETCH_DEFAULT;
-//				//this.fetchDEFAULT = true;
-//			}
-//		} else {
-//			this.fetch = RepositoryConst.FETCH_DEFAULT;
-//			//this.fetchDEFAULT = true;
-//		}
-//	}
 	/**
 	 * Set the fetch type (DEFAULT, EAGER, LAZY, UNDEFINED)
 	 * @param v the fetch type to be set (a 'null' value is transformed into 'UNDEFINED')
@@ -656,21 +379,6 @@ public class LinkInDbModel implements Serializable, Link
 		}
 		
 	}
-	
-//	public boolean isFetchDEFAULT() {
-//		//return fetchDEFAULT;
-//		return ( RepositoryConst.FETCH_DEFAULT.equals( this.fetch ) ) ;
-//	}
-//
-//	public boolean isFetchEAGER() {
-//		//return fetchEAGER;
-//		return ( RepositoryConst.FETCH_EAGER.equals( this.fetch ) ) ;
-//	}
-//
-//	public boolean isFetchLAZY() {
-//		//return fetchLAZY;
-//		return ( RepositoryConst.FETCH_LAZY.equals( this.fetch ) ) ;
-//	}
 	
 	//--------------------------------------------------------------------------
 	// FOREIGN KEY management
@@ -744,7 +452,7 @@ public class LinkInDbModel implements Serializable, Link
 	@Override
 	public String getComparableString() 
 	{
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		sb.append( "#" );
 		sb.append( this.getId() );
 		sb.append( ":" );
@@ -756,8 +464,8 @@ public class LinkInDbModel implements Serializable, Link
 		sb.append( "/" );
 		sb.append( this.getFieldName() );
 		sb.append( "/" );
-		sb.append( this.getFieldType() );
-		sb.append( "/" );
+//		sb.append( this.getFieldType() );
+//		sb.append( "/" );
 		sb.append( this.getMappedBy() );
 		sb.append( "/" );
 		sb.append( this.getTargetEntityClassName() );
@@ -776,7 +484,6 @@ public class LinkInDbModel implements Serializable, Link
 		sb.append( "/" );
 		sb.append( this.getOptional() );
 		sb.append( "/" );
-		//sb.append( this.isUsed() );
 		sb.append( this.isSelected() ); // v 3.0.0
 		
 		return sb.toString();
@@ -799,7 +506,7 @@ public class LinkInDbModel implements Serializable, Link
 	 */
 	public String toString() 
 	{
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		sb.append( this.getId() );
 		sb.append( " '"  );
 		sb.append( this.getSourceTableName() );
@@ -810,8 +517,8 @@ public class LinkInDbModel implements Serializable, Link
 		sb.append( " - "  );
 		sb.append( this.isOwningSide() ? "OWNING-SIDE" : "INVERSE-SIDE" );
 		sb.append( ") "  );
-		sb.append( this.getFieldType() );
-		sb.append( " "  );
+//		sb.append( this.getFieldType() );
+//		sb.append( " "  );
 		sb.append( this.getFieldName() );		
 		return sb.toString();
 	}

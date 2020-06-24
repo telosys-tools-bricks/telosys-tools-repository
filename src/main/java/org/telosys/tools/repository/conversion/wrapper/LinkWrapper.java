@@ -38,31 +38,25 @@ public class LinkWrapper extends GenericWrapper {
 		
 		link.setId(element.getAttribute(RepositoryConst.LINK_ID));
 		
-//		link.setCascade(element.getAttribute(RepositoryConst.LINK_CASCADE));
 		link.setCascadeOptions(convertStringToCascadeOptions(element.getAttribute(RepositoryConst.LINK_CASCADE)));
 		
-//		link.setFetch(element.getAttribute(RepositoryConst.LINK_FETCH));
 		link.setFetchType(convertStringToFetchType(element.getAttribute(RepositoryConst.LINK_FETCH))); // v 3.0.0
 
-//		link.setInverseSideOf(element.getAttribute(RepositoryConst.LINK_INVERSE_SIDE_OF));
 		link.setInverseSideLinkId(nullIfVoidOrBlank(element.getAttribute(RepositoryConst.LINK_INVERSE_SIDE_OF))); // v 3.0.0
 		
-//		link.setJavaFieldName(element.getAttribute(RepositoryConst.LINK_JAVA_NAME));
 		link.setFieldName(mandatory(element.getAttribute(RepositoryConst.LINK_JAVA_NAME))); // v 3.0.0
 		
-//		link.setJavaFieldType(element.getAttribute(RepositoryConst.LINK_JAVA_TYPE));
-		link.setFieldType(mandatory(element.getAttribute(RepositoryConst.LINK_JAVA_TYPE))); // v 3.0.0
+		// REMOVED in v 3.3.0 : link.setFieldType(mandatory(element.getAttribute(RepositoryConst.LINK_JAVA_TYPE))); // v 3.0.0
+		// Value is now always "unused" for previous version 
 		
 		link.setMappedBy( nullIfVoidOrBlank(element.getAttribute(RepositoryConst.LINK_MAPPED_BY)) );
 		
-//		link.setTargetEntityJavaType(element.getAttribute(RepositoryConst.LINK_TARGET_ENTITY));
 		link.setTargetEntityClassName(element.getAttribute(RepositoryConst.LINK_TARGET_ENTITY)); // v 3.0.0
 		
 		link.setSourceTableName(element.getAttribute(RepositoryConst.LINK_SOURCE_TABLE_NAME));
 		
 		link.setTargetTableName(element.getAttribute(RepositoryConst.LINK_TARGET_TABLE_NAME));
 		
-//		link.setCardinality(element.getAttribute(RepositoryConst.LINK_CARDINALITY));
 		link.setCardinality(convertStringToCardinality(element.getAttribute(RepositoryConst.LINK_CARDINALITY)));
 
 		if (StrUtil.nullOrVoid(element.getAttribute(RepositoryConst.LINK_FOREIGN_KEY_NAME)) == false) {
@@ -75,11 +69,9 @@ public class LinkWrapper extends GenericWrapper {
 			link.setOwningSide(StrUtil.getBoolean(element.getAttribute(RepositoryConst.LINK_OWNING_SIDE)));
 		}
 
-//		link.setOptional(element.getAttribute(RepositoryConst.LINK_OPTIONAL));
 		link.setOptional(convertStringToOptional(element.getAttribute(RepositoryConst.LINK_OPTIONAL)));
 
 		if (StrUtil.nullOrVoid(element.getAttribute(RepositoryConst.LINK_USED)) == false) {
-			//link.setUsed(StrUtil.getBoolean(element.getAttribute(RepositoryConst.LINK_USED)));
 			link.setSelected(StrUtil.getBoolean(element.getAttribute(RepositoryConst.LINK_USED))); // v 3.0.0
 		}
 		return link;
@@ -91,24 +83,21 @@ public class LinkWrapper extends GenericWrapper {
 		
 		element.setAttribute(RepositoryConst.LINK_ID, link.getId());
 		
-//		element.setAttribute(RepositoryConst.LINK_CASCADE, link.getCascade());
 		element.setAttribute(RepositoryConst.LINK_CASCADE, convertCascadeOptionsToString(link.getCascadeOptions())); // v 3.0.0
 		
-//		element.setAttribute(RepositoryConst.LINK_FETCH, link.getFetch());
 		element.setAttribute(RepositoryConst.LINK_FETCH, convertFetchTypeToString(link.getFetchType()) ); // v 3.0.0
 		
-//		element.setAttribute(RepositoryConst.LINK_INVERSE_SIDE_OF, link.getInverseSideOf());
 		element.setAttribute(RepositoryConst.LINK_INVERSE_SIDE_OF, link.getInverseSideLinkId()); // v 3.0.0
 		
-//		element.setAttribute(RepositoryConst.LINK_JAVA_NAME, link.getJavaFieldName());
 		element.setAttribute(RepositoryConst.LINK_JAVA_NAME, link.getFieldName()); // v 3.0.0
 		
-//		element.setAttribute(RepositoryConst.LINK_JAVA_TYPE, link.getJavaFieldType());
-		element.setAttribute(RepositoryConst.LINK_JAVA_TYPE, link.getFieldType()); // v 3.0.0
+		// "FieldType" REMOVED in v 3.3.0 BUT KEEP XML ATTRIBUTE in .dbrep file for backward compatibility
+		// in previous versions this attribute is "mandatory" : link.setFieldType(mandatory(xx)) => loading error if not exist
+		//element.setAttribute(RepositoryConst.LINK_JAVA_TYPE, link.getFieldType()); // v 3.0.0
+		element.setAttribute(RepositoryConst.LINK_JAVA_TYPE, "unused"); // v 3.3.0
 		
 		element.setAttribute(RepositoryConst.LINK_MAPPED_BY, link.getMappedBy());
 		
-//		element.setAttribute(RepositoryConst.LINK_TARGET_ENTITY, link.getTargetEntityJavaType());
 		element.setAttribute(RepositoryConst.LINK_TARGET_ENTITY, link.getTargetEntityClassName()); // v 3.0.0
 		
 		element.setAttribute(RepositoryConst.LINK_TARGET_TABLE_NAME, link.getTargetTableName());
@@ -118,15 +107,12 @@ public class LinkWrapper extends GenericWrapper {
 		
 		element.setAttribute(RepositoryConst.LINK_SOURCE_TABLE_NAME, link.getSourceTableName());
 		
-//		element.setAttribute(RepositoryConst.LINK_CARDINALITY, link.getCardinality());
 		element.setAttribute(RepositoryConst.LINK_CARDINALITY, convertCardinalityToString(link.getCardinality()));
 
 		element.setAttribute(RepositoryConst.LINK_OWNING_SIDE, Boolean.toString(link.isOwningSide()));
 		
-//		element.setAttribute(RepositoryConst.LINK_OPTIONAL, link.getOptional() );
 		element.setAttribute(RepositoryConst.LINK_OPTIONAL, convertOptionalToString(link.getOptional()) );
 
-//		element.setAttribute(RepositoryConst.LINK_USED, Boolean.toString(link.isUsed()));
 		element.setAttribute(RepositoryConst.LINK_USED, Boolean.toString(link.isSelected())); // v 3.0.0
 		
 		return element;
@@ -165,7 +151,7 @@ public class LinkWrapper extends GenericWrapper {
 	
 	private String convertCascadeOptionsToString(CascadeOptions cascadeOptions) {
 		if ( cascadeOptions != null ) {
-			StringBuffer sb = new StringBuffer();
+			StringBuilder sb = new StringBuilder();
 			for ( CascadeOption co : cascadeOptions.getActiveOptions() ) {
 				sb.append(" ");
 				switch (co) {
