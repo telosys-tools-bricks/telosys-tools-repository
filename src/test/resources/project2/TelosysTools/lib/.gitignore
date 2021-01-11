@@ -1,0 +1,6 @@
+# Purpose of this file is only to allow the addition of lib folder to git repository
+
+# Ignore everything in this directory
+*
+# Except this file
+!.gitignore
