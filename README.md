@@ -1,4 +1,4 @@
 # telosys-tools-repository
 Telosys Tools repository
 
-Telosys Database Model
+Telosys Database Model (Generic model implementation)
