@@ -20,8 +20,10 @@ import java.util.List;
 import org.telosys.tools.generic.model.Entity;
 import org.telosys.tools.generic.model.ForeignKey;
 import org.telosys.tools.generic.model.ForeignKeyColumn;
+import org.telosys.tools.generic.model.ForeignKeyPart;
 import org.telosys.tools.repository.model.AttributeInDbModel;
 import org.telosys.tools.repository.model.EntityInDbModel;
+import org.telosys.tools.repository.model.ForeignKeyPartInDbModel;
 import org.telosys.tools.repository.model.RepositoryModel;
 
 
@@ -60,6 +62,8 @@ public class ForeignKeyTypeManager
 				}
 				// Set FK type for each attribute involved in a FK  
 				setAttributesFKInfo((EntityInDbModel)entity, fk, referencedEntity); 
+				// Set FK parts for each attribute involved in one or more FK  ( ver 3.3.0 )
+				setAttributesFKParts((EntityInDbModel)entity, fk, referencedEntity); 
 			}
 		}		
 	}
@@ -84,6 +88,35 @@ public class ForeignKeyTypeManager
 				//--- Simple FK ( only one column )
 				ForeignKeyColumn fkCol = fkColumns.get(0);
 				setAttributeFKInfo(entity, fkCol, FK_SIMPLE, referencedEntity) ;
+			}
+		}
+	}
+	
+	/**
+	 * Setting 'Foreign Key Parts' for attributes involved in Foreign Key(s)
+	 * Added in ver 3.3.0
+	 * @param entity
+	 * @param fk
+	 * @param referencedEntity
+	 */
+	private void setAttributesFKParts(EntityInDbModel entity, ForeignKey fk, EntityInDbModel referencedEntity ) {
+		List<ForeignKeyColumn> fkColumns = fk.getColumns() ;
+		if ( fkColumns != null ) {
+			for ( ForeignKeyColumn fkCol : fkColumns ) {
+				AttributeInDbModel attribute = entity.getAttributeByColumnName(fkCol.getColumnName());
+				if ( attribute != null ) {
+					// Build FK part
+					AttributeInDbModel referencedAttribute = referencedEntity.getAttributeByColumnName(
+							fkCol.getReferencedColumnName());
+					ForeignKeyPart fkPart = new ForeignKeyPartInDbModel(
+							fk.getName(),
+							fk.getReferencedTableName(), 
+							fkCol.getReferencedColumnName(),
+							referencedEntity.getClassName(), 
+							referencedAttribute.getName());
+					// Add FK part
+					attribute.addFKPart(fkPart);
+				}
 			}
 		}
 	}

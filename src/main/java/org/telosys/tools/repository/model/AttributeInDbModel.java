@@ -17,6 +17,7 @@ package org.telosys.tools.repository.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +27,7 @@ import org.telosys.tools.commons.StrUtil;
 import org.telosys.tools.commons.jdbctypes.JdbcTypesManager;
 import org.telosys.tools.generic.model.Attribute;
 import org.telosys.tools.generic.model.DateType;
+import org.telosys.tools.generic.model.ForeignKeyPart;
 import org.telosys.tools.generic.model.types.AttributeTypeInfo;
 import org.telosys.tools.generic.model.types.TypeReverser;
 
@@ -57,10 +59,12 @@ public class AttributeInDbModel implements Comparable<AttributeInDbModel>, Seria
 	
 	private boolean _bKeyElement        = false ; // primaryKey="true|false" ( false by default ) // v 3.0.0
 	
+	//----- FOREIGN KEYS in which the attribute is involved
 	// An attribute can be involved in many FK, it can be both in a SIMPLE FK and in a COMPOSITE FK 
 	private boolean _bForeignKeySimple     = false ; // ( false by default )
 	private boolean _bForeignKeyComposite  = false ; // ( false by default )
 	private String  referencedEntityClassName = null ;
+	private List<ForeignKeyPart> fkParts = new LinkedList<>(); // Added in ver 3.3.0
 	
 	private boolean _bAutoIncremented  = false ; // autoIncremented="true|false" ( false by default )
 	
@@ -935,5 +939,22 @@ public class AttributeInDbModel implements Comparable<AttributeInDbModel>, Seria
 	@Override
 	public Map<String, String> getTagsMap() {
 		return null;
+	}
+
+	//-----------------------------------------------------------------------------------------
+	// FOREIGN KEYS in which the attribute is involved ( ver 3.3.0 )
+	//-----------------------------------------------------------------------------------------	
+	public void addFKPart(ForeignKeyPart fkPart) {
+		fkParts.add(fkPart);
+	}
+
+	@Override
+	public List<ForeignKeyPart> getFKParts() {
+		return fkParts;
+	}
+
+	@Override
+	public boolean hasFKParts() {
+		return  ! fkParts.isEmpty() ;
 	}
 }
