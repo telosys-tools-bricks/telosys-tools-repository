@@ -77,6 +77,19 @@ public class RepositoryModel implements Model
 	public void setName( String name) {
 		this.name = name;
 	}
+	
+	//--------------------------------------------------------------------------------------
+	@Override
+	public String getFolderName() {  // v 3.3.0
+		return ""; // no folder name for DB-MODEL
+	}
+
+	//--------------------------------------------------------------------------------------
+	@Override
+	public String getTitle() {
+		// Not implemented in DB-Model
+		return "" ;
+	}
 
 	//--------------------------------------------------------------------------------------
 	@Override
