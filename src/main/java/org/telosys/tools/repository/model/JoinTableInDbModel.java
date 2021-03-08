@@ -36,10 +36,8 @@ public class JoinTableInDbModel implements Serializable, JoinTable
 
 	private String catalog ;
 	
-//	private JoinColumnsInDbModel        joinColums = null ;
 	private List<JoinColumnInDbModel>   joinColumns = null ;
 
-//	private InverseJoinColumnsInDbModel inverseJoinColums = null ;
 	private List<JoinColumnInDbModel>   inverseJoinColumns = null ;
 	
 	
@@ -71,72 +69,31 @@ public class JoinTableInDbModel implements Serializable, JoinTable
 	}
 
 	//--------------------------------------------------------------------------
-//	private List<JoinColumn> toListOfJoinColumns(List<JoinColumnInDbModel> listOfJoinColumnInDbModel) {
-//		LinkedList<JoinColumn> joinColumns = new LinkedList<JoinColumn>();
-//		for ( JoinColumn jc : listOfJoinColumnInDbModel ) {
-//			joinColumns.add(jc);
-//		}
-//		return joinColumns ;
-//	}
-
-//	public void setJoinColumns( JoinColumnsInDbModel joinColumns ) {
-//		joinColums = joinColumns ;
-//	}
-	public void setJoinColumns( List<JoinColumnInDbModel> joinColumns ) 	{
+	public void setJoinColumns( List<JoinColumnInDbModel> joinColumns ) {
 		this.joinColumns = joinColumns ;
 	}
-//	public JoinColumnsInDbModel getJoinColumns() {
-//		return joinColums ;
-//	}
 	@Override
 	public List<JoinColumn> getJoinColumns() {
-//		LinkedList<JoinColumn> joinColumns = new LinkedList<JoinColumn>();
-//		for ( JoinColumn jc : joinColumsInDbModel ) {
-//			joinColumns.add(jc);
-//		}
-//		return joinColumns ;
-//		return toListOfJoinColumns(this.joinColumns) ;
 		return DbModelUtil.toListOfJoinColumns(this.joinColumns);
 	}
 	
 	//--------------------------------------------------------------------------
-//	public void setInverseJoinColumns( InverseJoinColumnsInDbModel joinColumns ) {
-//		inverseJoinColums = joinColumns ;
-//	}
 	public void setInverseJoinColumns( List<JoinColumnInDbModel> inverseJoinColumns ) {
 		this.inverseJoinColumns = inverseJoinColumns ;
 	}
-//	public InverseJoinColumnsInDbModel getInverseJoinColumns() {
-//		return inverseJoinColums ;
-//	}
 	@Override
 	public List<JoinColumn> getInverseJoinColumns() {
-		//return toListOfJoinColumns(this.inverseJoinColumns) ;
 		return DbModelUtil.toListOfJoinColumns(this.inverseJoinColumns);		
 	}
 	
 	//--------------------------------------------------------------------------
-	public String getCheckSum() {
-		return name;
+//	public String getCheckSum() {
+//		return name;
+//	}
+
+	@Override
+	public String toString() {
+		return name ;
 	}
 
-// Unreliable & Unused (removed in v 2.1.1 )
-//	/**
-//	 * Control functionnal equality of link
-//	 * @param otherLink
-//	 * @return if param link is equal to current link
-//	 */
-//	public boolean equals(final JoinTable joinTable) {
-//		// considers that the comparison of the name of the join table is sufficient to establish the equity of JoinTable
-//		if (joinTable != null) {
-//			if (joinTable.getCheckSum().equals(this.getCheckSum())) {
-//				return true;
-//			} else {
-//				return false;
-//			}
-//		} else {
-//			return false;
-//		}
-//	}
-	
 }
