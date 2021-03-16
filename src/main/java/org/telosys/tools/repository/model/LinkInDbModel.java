@@ -19,6 +19,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.telosys.tools.commons.StrUtil;
+import org.telosys.tools.generic.model.BooleanValue;
 import org.telosys.tools.generic.model.Cardinality;
 import org.telosys.tools.generic.model.CascadeOptions;
 import org.telosys.tools.generic.model.FetchType;
@@ -59,6 +60,9 @@ public class LinkInDbModel implements Serializable, Link
 	private String inverseSideLinkId ; // v 3.0.0
 	
 	private String mappedBy;  // inverse side, mapped by define property
+	
+    private BooleanValue isInsertable = BooleanValue.UNDEFINED; // Added in v 3.3.0
+    private BooleanValue isUpdatable  = BooleanValue.UNDEFINED; // Added in v 3.3.0
 
 	/**
 	 * The operations that must be cascaded to the target of the association. By default no operations are cascaded : 
@@ -522,4 +526,21 @@ public class LinkInDbModel implements Serializable, Link
 		sb.append( this.getFieldName() );		
 		return sb.toString();
 	}
+	
+    @Override
+    public BooleanValue getInsertable() { // v 3.3.0
+        return this.isInsertable;
+    }
+    public void setInsertable(BooleanValue b) {
+        this.isInsertable = b;
+    }
+
+    @Override
+    public BooleanValue getUpdatable() { // v 3.3.0
+        return this.isUpdatable;
+    }
+    public void setUpdatable(BooleanValue b) {
+        this.isUpdatable = b;
+    }
+
 }
