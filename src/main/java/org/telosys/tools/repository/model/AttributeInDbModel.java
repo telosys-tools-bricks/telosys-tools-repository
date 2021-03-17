@@ -26,6 +26,7 @@ import org.telosys.tools.commons.JavaTypeUtil;
 import org.telosys.tools.commons.StrUtil;
 import org.telosys.tools.commons.jdbctypes.JdbcTypesManager;
 import org.telosys.tools.generic.model.Attribute;
+import org.telosys.tools.generic.model.BooleanValue;
 import org.telosys.tools.generic.model.DateType;
 import org.telosys.tools.generic.model.ForeignKeyPart;
 import org.telosys.tools.generic.model.types.AttributeTypeInfo;
@@ -130,6 +131,9 @@ public class AttributeInDbModel implements Comparable<AttributeInDbModel>, Seria
 	
 	private SequenceGeneratorInDbModel sequenceGenerator = null ;
 	
+    private BooleanValue insertable = BooleanValue.UNDEFINED; // Added in v 3.3.0
+    private BooleanValue updatable  = BooleanValue.UNDEFINED; // Added in v 3.3.0
+
 	
 	/**
 	 * Constructor
@@ -957,4 +961,21 @@ public class AttributeInDbModel implements Comparable<AttributeInDbModel>, Seria
 	public boolean hasFKParts() {
 		return  ! fkParts.isEmpty() ;
 	}
+	
+    @Override
+    public BooleanValue getInsertable() {  // v 3.3.0
+        return this.insertable;
+    }
+    public void setInsertable(BooleanValue b) {  // v 3.3.0
+        this.insertable = b;
+    }
+
+    @Override
+    public BooleanValue getUpdatable() {  // v 3.3.0
+        return this.updatable;
+    }
+    public void setUpdatable(BooleanValue b) {  // v 3.3.0
+        this.updatable = b;
+    }
+
 }
