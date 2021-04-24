@@ -21,7 +21,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.telosys.tools.commons.DatabaseUtil;
 import org.telosys.tools.commons.JavaTypeUtil;
 import org.telosys.tools.commons.StrUtil;
 import org.telosys.tools.commons.jdbctypes.JdbcTypesManager;
@@ -317,14 +316,14 @@ public class AttributeInDbModel implements Comparable<AttributeInDbModel>, Seria
 		return _sDatabaseTypeName;
 	}
 	
-	/**
-     * Returns the database native type name with its size if the size make sense.<br>
-     * Examples : INTEGER, VARCHAR(24), NUMBER, CHAR(3), etc... 
-	 * @return
-	 */
-	public String getDatabaseTypeNameWithSize() {
-		return DatabaseUtil.getNativeTypeWithSize(_sDatabaseTypeName, databaseSize, _iJdbcTypeCode);
-	}
+//	/**
+//     * Returns the database native type name with its size if the size make sense.<br>
+//     * Examples : INTEGER, VARCHAR(24), NUMBER, CHAR(3), etc... 
+//	 * @return
+//	 */
+//	public String getDatabaseTypeNameWithSize() {
+//		return DatabaseUtil.getNativeTypeWithSize(_sDatabaseTypeName, databaseSize, _iJdbcTypeCode);
+//	}
 
 	public void setDatabaseTypeName(String databaseTypeName) {
 		_sDatabaseTypeName = databaseTypeName;
@@ -865,10 +864,10 @@ public class AttributeInDbModel implements Comparable<AttributeInDbModel>, Seria
 		return getTypeInfo(_sModelFullType).isObjectTypeExpected();
 	}
 
-	@Override
-	public boolean isSqlTypeExpected() {
-		return getTypeInfo(_sModelFullType).isSqlTypeExpected();
-	}
+//	@Override
+//	public boolean isSqlTypeExpected() {
+//		return getTypeInfo(_sModelFullType).isSqlTypeExpected();
+//	}
 
 	//-----------------------------------------------------------------------------
 	
