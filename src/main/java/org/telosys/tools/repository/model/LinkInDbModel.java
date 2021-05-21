@@ -63,6 +63,7 @@ public class LinkInDbModel implements Serializable, Link
 	
     private BooleanValue isInsertable = BooleanValue.UNDEFINED; // Added in v 3.3.0
     private BooleanValue isUpdatable  = BooleanValue.UNDEFINED; // Added in v 3.3.0
+    private boolean isTransient = false ; // Added in v 3.3.0
 
 	/**
 	 * The operations that must be cascaded to the target of the association. By default no operations are cascaded : 
@@ -542,5 +543,12 @@ public class LinkInDbModel implements Serializable, Link
     public void setUpdatable(BooleanValue b) {
         this.isUpdatable = b;
     }
-
+    
+    @Override
+    public boolean isTransient() { // v 3.3.0
+        return this.isTransient;
+    }
+    public void setTransient(boolean b) { // v 3.3.0
+        this.isTransient = b;
+    }
 }

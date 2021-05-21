@@ -133,7 +133,8 @@ public class AttributeInDbModel implements Comparable<AttributeInDbModel>, Seria
     private BooleanValue insertable = BooleanValue.UNDEFINED; // Added in v 3.3.0
     private BooleanValue updatable  = BooleanValue.UNDEFINED; // Added in v 3.3.0
 
-	
+    private boolean isTransient = false ; // Added in v 3.3.0
+
 	/**
 	 * Constructor
 	 * @since v 3.0.0
@@ -975,6 +976,14 @@ public class AttributeInDbModel implements Comparable<AttributeInDbModel>, Seria
     }
     public void setUpdatable(BooleanValue b) {  // v 3.3.0
         this.updatable = b;
+    }
+    
+    @Override
+    public boolean isTransient() { // v 3.3.0
+        return this.isTransient;
+    }
+    public void setTransient(boolean b) { // v 3.3.0
+        this.isTransient = b;
     }
 
 }
