@@ -12,7 +12,7 @@
 
 	<name>telosys-tools-repository</name>
 	<artifactId>telosys-tools-repository</artifactId>
-	<version>3.3.0-SNAPSHOT</version> <!-- also update version in DbModelVersion.java  -->
+	<version>3.3.0</version> <!-- also update version in DbModelVersion.java  -->
 	<packaging>jar</packaging>
 
 	<dependencies>
